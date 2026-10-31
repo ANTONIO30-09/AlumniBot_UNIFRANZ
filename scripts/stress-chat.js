@@ -5,8 +5,8 @@ const URL_ = (process.env.URL || 'http://localhost:3000') + '/api/chat';
 const N = +process.env.N || 10;
 const FIELD = process.env.CHAT_FIELD || 'message';
 const UNIQUE = process.env.UNIQUE === '1';
-const PREGUNTAS = ['¿Qué es la Red Alumni?', '¿Qué es Unifranz?', '¿Cómo me inscribo?',
-  '¿Qué carreras hay?', '¿Dónde queda la universidad?', '¿Hay becas?'];
+const PREGUNTAS = ['¿Qué es la Red Alumni?', '¿Cómo consigo una pasantía?', '¿Cómo encuentro vacantes?',
+  '¿Qué es Career Coaching?', '¿Cuándo hay ferias de empleabilidad?', '¿Qué beneficios tengo como Alumni?'];
 const DEGRADED = /muchas preguntas|problemas t[eé]cnicos|clave de API/i;
 const NOINFO = /no tengo esa informaci[oó]n/i;
 
