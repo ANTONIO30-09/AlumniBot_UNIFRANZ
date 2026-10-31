@@ -17,90 +17,70 @@ body {
     display: flex;
     justify-content: center;
     height: 100dvh;
-    overflow: hidden; /* Bloquea el scroll de toda la página */
+    overflow: hidden;
 }
 
-/* Estructura principal estricta */
-.chat-container {
+.app-container {
     width: 100%;
     max-width: 500px;
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    overflow: hidden;
+    position: relative;
 }
 
-/* Header fijo */
 header { 
     flex-shrink: 0; 
     text-align: center; 
     padding: 15px; 
+    z-index: 10;
 }
 header h1 { margin: 0; font-size: 1.6rem; font-weight: 800; }
 header h1 span { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
 header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 
-/* Avatar fijo */
-.avatar-container {
-    flex-shrink: 0;
+/* --- SECCIÓN AVATAR (ONBOARDING) --- */
+.avatar-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px 20px;
+    justify-content: center;
+    flex: 1; /* Ocupa todo el espacio inicialmente */
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     position: relative;
+    z-index: 5;
+}
+
+.avatar-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .avatar-container::before {
     content: '';
     position: absolute;
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     background: var(--accent-color);
-    filter: blur(50px);
-    opacity: 0.3;
+    filter: blur(60px);
+    opacity: 0.4;
     z-index: 0;
-    top: 20%;
     border-radius: 50%;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.speech-bubble {
-    background: #3A2A22;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 15px;
-    font-size: 0.85rem;
-    position: relative;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    z-index: 1;
-}
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 20px;
-    border-width: 8px 8px 0;
-    border-style: solid;
-    border-color: #3A2A22 transparent transparent transparent;
-}
-.dots { display: flex; gap: 4px; }
-.dots span { width: 5px; height: 5px; background: var(--accent-color); border-radius: 50%; animation: blink 1.4s infinite both; }
-.dots span:nth-child(2) { animation-delay: 0.2s; }
-.dots span:nth-child(3) { animation-delay: 0.4s; }
-
-/* Imagen del Avatar (Ajustada y sin flotar) */
 .avatar-img {
-    width: 180px;
-    height: 180px;
+    width: 260px; /* Tamaño grande inicial */
+    height: 260px;
     object-fit: contain;
     background: transparent !important;
-    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.8));
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
     z-index: 1;
-    animation: breathe 4s ease-in-out infinite; /* Animación sutil */
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    animation: breathe 4s ease-in-out infinite;
 }
 
 @keyframes breathe {
@@ -108,63 +88,108 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     50% { transform: scale(1.03); }
 }
 
-.avatar-img.speaking {
-    animation: speakPulse 0.3s infinite alternate;
+.greeting-text {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--text-light);
+    font-weight: 500;
+    transition: all 0.5s ease;
+    max-width: 80%;
 }
 
-@keyframes speakPulse {
-    from { transform: scale(1.03); filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.8)); }
-    to { transform: scale(1.05); filter: drop-shadow(0 15px 25px var(--accent-glow)); }
+.status { 
+    margin-top: 15px; 
+    font-size: 0.9rem; 
+    color: var(--accent-color); 
+    font-weight: bold; 
+    transition: opacity 0.5s ease;
 }
 
-.status { margin-top: 10px; font-size: 0.85rem; color: var(--accent-color); font-weight: bold; z-index: 1; }
+/* --- SECCIÓN DEL CHAT (OCULTA INICIALMENTE) --- */
+.chat-section {
+    flex: 0 0 0; /* Altura 0 inicial */
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+}
 
-/* --- CAJA DE MENSAJES CON SCROLL --- */
 .chat-box {
-    flex: 1; /* Ocupa todo el espacio restante */
-    min-height: 0; /* CRUCIAL para que el scroll funcione en flexbox */
+    flex: 1;
+    min-height: 0;
     padding: 10px 20px;
-    overflow-y: auto; /* Habilita el scroll interno */
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    /* Ocultar la barra de scroll visualmente para que se vea limpio */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none;
 }
-.chat-box::-webkit-scrollbar { 
-    display: none; /* Chrome/Safari */
-}
+.chat-box::-webkit-scrollbar { display: none; }
 
-.message { padding: 12px 18px; border-radius: 20px; max-width: 85%; line-height: 1.4; font-size: 0.95rem; }
+.message { 
+    padding: 12px 18px; 
+    border-radius: 20px; 
+    max-width: 85%; 
+    line-height: 1.4; 
+    font-size: 0.95rem; 
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
 .bot-message { background-color: var(--bot-msg); color: var(--text-light); align-self: flex-start; border-bottom-left-radius: 4px; }
 .user-message { background-color: var(--user-msg); color: #FFFFFF; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-/* --- INPUT FIJO ABAJO --- */
+/* --- INPUT FIJO --- */
 .input-wrapper { 
     flex-shrink: 0; 
     padding: 10px 15px; 
     padding-bottom: max(15px, env(safe-area-inset-bottom)); 
-    background: var(--bg-black); /* Fondo sólido para tapar el chat detrás */
+    background: transparent;
+    z-index: 10;
 }
 .input-area { display: flex; align-items: center; background-color: var(--bot-msg); border-radius: 30px; padding: 8px 10px 8px 20px; border: 1px solid #3A3A3A; }
 #text-input { flex: 1; background: transparent; border: none; color: white; font-size: 1rem; outline: none; }
 #text-input::placeholder { color: var(--text-muted); }
 
-.btn-send, .btn-mic { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; margin-left: 8px; }
+.btn-send, .btn-mic { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; margin-left: 8px; transition: 0.2s; }
 .btn-send { background-color: var(--accent-color); color: white; box-shadow: 0 0 10px var(--accent-glow); }
 .btn-mic { background-color: transparent; color: var(--text-muted); }
 .hidden { display: none !important; }
 
-/* Grabación */
-.recording-bar { background-color: var(--bot-msg); border-radius: 30px; padding: 8px 15px; display: flex; align-items: center; gap: 15px; }
-.plus-btn { background: transparent; color: var(--text-muted); font-size: 24px; border: none; cursor:pointer;}
-#waveform { flex: 1; height: 30px; background: transparent; }
-.stop-btn { width: 36px; height: 36px; border-radius: 50%; background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
-.stop-square { width: 12px; height: 12px; background-color: #000000; border-radius: 2px; }
-.send-voice-btn { width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: white; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); }
+/* --- CLASES DE ESTADO (ACTIVADAS POR JS) --- */
+.app-container.chat-mode .avatar-section {
+    flex: 0 0 auto; /* Se encoge al contenido */
+    padding-top: 0;
+    padding-bottom: 10px;
+}
+
+.app-container.chat-mode .avatar-img {
+    width: 100px; /* Tamaño pequeño en modo chat */
+    height: 100px;
+}
+
+.app-container.chat-mode .avatar-container::before {
+    width: 100px;
+    height: 100px;
+    filter: blur(30px);
+}
+
+.app-container.chat-mode .greeting-text {
+    opacity: 0;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+.app-container.chat-mode .chat-section {
+    flex: 1; /* Ocupa el espacio restante */
+    opacity: 1;
+    overflow: visible;
+}
 
 @media (max-width: 600px) {
-    .avatar-img { width: 150px; height: 150px; }
-    .speech-bubble { display: none; } /* Ocultamos el globo en móviles para ganar espacio */
+    .avatar-img { width: 200px; height: 200px; }
+    .app-container.chat-mode .avatar-img { width: 80px; height: 80px; }
 }
