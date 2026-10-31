@@ -28,7 +28,7 @@ async function generateResponse(userMessage) {
         { role: 'system', content: `CONTEXTO OFICIAL:\n${context}` },
         { role: 'user', content: userMessage }
       ],
-      model: 'llama-3.3-70b-versatile',
+      model: 'openai/gpt-oss-120b',
       temperature: 0.3,
       max_tokens: 250,
     });
