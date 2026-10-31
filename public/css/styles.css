@@ -70,9 +70,10 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     bottom: 0;
 }
 
+/* Avatar un poco más pequeño para dar espacio a la burbuja */
 .avatar-img {
     width: 100%;
-    max-width: 450px; 
+    max-width: 360px; 
     height: 100%;
     max-height: 100%; 
     object-fit: contain;
@@ -82,31 +83,31 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
     z-index: 1;
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    margin-bottom: -2px; /* Para que toque exactamente el input */
+    margin-bottom: -2px;
 }
 
-/* --- NUEVA BURBUJA INMERSIVA (A LA DERECHA) --- */
+/* --- BURBUJA EMPUJADA HACIA AFUERA --- */
 .modern-bubble {
     position: absolute;
-    top: 22%; /* Altura de la cara */
-    right: 5%; /* A la derecha */
-    background: rgba(42, 42, 42, 0.85); /* Fondo oscuro semi-transparente */
-    backdrop-filter: blur(10px); /* Efecto cristal */
-    color: var(--text-light); /* Texto blanco */
-    padding: 15px 20px;
+    top: 15%; /* Más arriba */
+    right: -8%; /* Empujada hacia la derecha, fuera de la cara */
+    background: rgba(42, 42, 42, 0.85); 
+    backdrop-filter: blur(10px); 
+    color: var(--text-light); 
+    padding: 12px 16px;
     border-radius: 20px;
-    border: 2px solid var(--accent-color); /* Borde Naranja */
+    border: 2px solid var(--accent-color); 
     font-weight: 500;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow); /* Brillo naranja */
+    font-size: 0.85rem; /* Texto un poco más pequeño */
+    line-height: 1.3;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow); 
     z-index: 5;
     transition: all 0.4s ease;
-    max-width: 190px;
+    max-width: 160px; /* Más angosta */
     text-align: left;
 }
 
-/* Colita de la burbuja apuntando a la izquierda (hacia la boca) */
+/* Pico de la burbuja alargado para llegar a la boca */
 .modern-bubble::before {
     content: '';
     position: absolute;
