@@ -3,6 +3,10 @@ const textInput = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDiv = document.getElementById('status');
+const recIndicator = document.getElementById('recording-indicator');
+
+let isRecording = false;
+let finalTranscript = '';
 
 function addMessage(text, sender) {
     const msgDiv = document.createElement('div');
@@ -16,6 +20,7 @@ async function sendMessage(message) {
     if (!message.trim()) return;
     addMessage(message, 'user');
     textInput.value = '';
+    finalTranscript = '';
     statusDiv.textContent = "Pensando...";
 
     try {
@@ -39,43 +44,79 @@ async function sendMessage(message) {
     }
 }
 
-sendBtn.addEventListener('click', () => sendMessage(textInput.value));
-textInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage(textInput.value);
+// ENVIAR (Si está grabando, detiene y envía)
+sendBtn.addEventListener('click', () => {
+    if (isRecording) {
+        stopRecording();
+    }
+    sendMessage(textInput.value);
 });
+
+textInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        if (isRecording) stopRecording();
+        sendMessage(textInput.value);
+    }
+});
+
+// LÓGICA DEL MICRÓFONO
+function stopRecording() {
+    if (window.speechAPI.recognition) {
+        window.speechAPI.recognition.stop();
+    }
+    isRecording = false;
+    micBtn.classList.remove('listening');
+    recIndicator.classList.add('hidden');
+    statusDiv.textContent = "Dictado detenido. Puedes editar o enviar.";
+}
 
 if (window.speechAPI.recognition) {
     micBtn.addEventListener('click', () => {
-        if (micBtn.classList.contains('listening')) {
-            window.speechAPI.recognition.stop();
-            return;
-        }
-        try {
-            window.speechAPI.recognition.start();
-            micBtn.classList.add('listening');
-            statusDiv.textContent = "Escuchando...";
-        } catch (e) {
-            console.error(e);
+        if (isRecording) {
+            stopRecording();
+        } else {
+            try {
+                finalTranscript = textInput.value; // Mantiene lo que ya estaba escrito
+                window.speechAPI.recognition.start();
+                isRecording = true;
+                micBtn.classList.add('listening');
+                recIndicator.classList.remove('hidden');
+                statusDiv.textContent = "Escuchando...";
+            } catch (e) {
+                console.error(e);
+            }
         }
     });
 
+    // Evento que se dispara mientras hablas (tiempo real)
     window.speechAPI.recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        sendMessage(transcript);
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                finalTranscript += event.results[i][0].transcript + ' ';
+            } else {
+                interimTranscript += event.results[i][0].transcript;
+            }
+        }
+        // Muestra lo que estás hablando en el input
+        textInput.value = finalTranscript + interimTranscript;
     };
 
     window.speechAPI.recognition.onend = () => {
-        micBtn.classList.remove('listening');
-        if (statusDiv.textContent === "Escuchando...") {
-            statusDiv.textContent = "Presiona el micrófono para hablar";
+        if (isRecording) {
+            // Si el navegador lo detiene por inactividad, lo reiniciamos
+            window.speechAPI.recognition.start();
         }
     };
 
-    // MOSTRAR EL ERROR REAL
     window.speechAPI.recognition.onerror = (event) => {
         console.error("Error de reconocimiento:", event.error);
-        micBtn.classList.remove('listening');
-        statusDiv.textContent = `Error: ${event.error}. Revisa tu micrófono.`;
+        stopRecording();
+        if (event.error === 'network') {
+            statusDiv.textContent = "Error de red (Chrome en Linux no soporta voz nativa). Usa el teclado.";
+        } else {
+            statusDiv.textContent = `Error: ${event.error}.`;
+        }
     };
 } else {
     micBtn.style.display = 'none';
