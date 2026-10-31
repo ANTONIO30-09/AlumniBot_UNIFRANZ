@@ -15,9 +15,13 @@
 
         <div class="avatar-section" id="avatar-section">
             <div class="avatar-wrapper">
-                <!-- Globo de texto normal para Glassmorphism -->
-                <div class="modern-bubble" id="modern-bubble">
-                    ¡Hola! Soy AlumniBot.<br>¿En qué puedo ayudarte?
+                <!-- Globo de texto SVG simple y perfecto -->
+                <div class="modern-bubble">
+                    <svg class="bubble-svg" viewBox="0 0 200 100" preserveAspectRatio="none">
+                        <path d="M 15 5 L 165 5 Q 180 5 180 20 L 180 60 Q 180 75 165 75 L 150 75 L 180 100 L 130 75 L 15 75 Q 0 75 0 60 L 0 20 Q 0 5 15 5 Z" 
+                              fill="rgba(42, 42, 42, 0.85)" stroke="#EC5E17" stroke-width="4" stroke-linejoin="round" />
+                    </svg>
+                    <span class="bubble-text">¡Hola! Soy AlumniBot.<br>¿En qué puedo ayudarte?</span>
                 </div>
                 <img src="/assets/avatar.png" alt="AlumniBot" class="avatar-img" id="bot-avatar">
             </div>
@@ -38,6 +42,7 @@
                 </button>
             </div>
 
+            <!-- Barra de grabación (Oculta) -->
             <div class="input-area recording-bar hidden" id="recording-bar">
                 <button class="icon-btn plus-btn" title="Adjuntar">+</button>
                 <canvas id="waveform" width="300" height="40"></canvas>
