@@ -4,18 +4,17 @@ const { generateResponse } = require('../services/llm');
 
 // POST /api/chat
 router.post('/', async (req, res) => {
-  const { message } = req.body;
+  const message = req.body && req.body.message;
 
-  if (!message || message.trim() === '') {
+  if (typeof message !== 'string' || message.trim() === '') {
     return res.status(400).json({ error: 'El mensaje es obligatorio.' });
   }
-
   if (message.length > 500) {
     return res.status(400).json({ error: 'El mensaje es demasiado largo. Por favor, sé más breve.' });
   }
 
   try {
-    const botResponse = await generateResponse(message);
+    const botResponse = await generateResponse(message.trim());
     res.json({ response: botResponse });
   } catch (error) {
     console.error('Error en la ruta /api/chat:', error);
