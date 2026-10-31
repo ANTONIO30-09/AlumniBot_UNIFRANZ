@@ -1,0 +1,26 @@
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const synth = window.speechSynthesis;
+let recognition;
+
+if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'es-BO'; // Español Bolivia
+    recognition.continuous = false;
+    recognition.interimResults = false;
+}
+
+function speak(text) {
+    if (synth.speaking) synth.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-BO';
+    utterance.rate = 1.0;
+    
+    // Iniciar animación de boca al hablar y detenerla al terminar
+    utterance.onstart = () => window.avatarAnimation.startMouthAnimation();
+    utterance.onend = () => window.avatarAnimation.stopMouthAnimation();
+    utterance.onerror = () => window.avatarAnimation.stopMouthAnimation();
+
+    synth.speak(utterance);
+}
+
+window.speechAPI = { recognition, speak };
