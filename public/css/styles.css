@@ -272,3 +272,39 @@ button {
     from { transform: scale(1.03) translateY(-5px); }
     to { transform: scale(1.05) translateY(-8px); }
 }
+
+/* --- DISEÑO RESPONSIVO (MOBILE-FIRST) --- */
+@media (max-width: 600px) {
+    body {
+        align-items: flex-start; /* Evita que el chat flote en el centro en el celular */
+    }
+
+    .chat-container {
+        max-width: 100%;
+        height: 100vh; /* Ocupa todo el alto de la pantalla del celular */
+        border-radius: 0; /* Quita los bordes redondeados en móvil */
+        box-shadow: none;
+    }
+
+    .avatar-img {
+        width: 90px; /* Un poco más pequeño en móvil para ahorrar espacio */
+        height: 90px;
+    }
+
+    .avatar-container {
+        padding: 10px; /* Menos espacio arriba */
+    }
+
+    .input-area {
+        padding: 10px;
+    }
+
+    #text-input {
+        padding: 10px;
+        font-size: 16px; /* Evita que iOS haga zoom automático al escribir */
+    }
+
+    .btn-send, .btn-mic {
+        padding: 10px;
+    }
+}
