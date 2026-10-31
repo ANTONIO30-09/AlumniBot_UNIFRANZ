@@ -29,7 +29,6 @@ body {
     flex-direction: column;
     height: 100dvh;
     position: relative;
-    justify-content: flex-start; /* Asegura que todo empiece arriba */
 }
 
 header { flex-shrink: 0; text-align: center; padding: 15px; z-index: 20;}
@@ -46,8 +45,6 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     justify-content: flex-end; 
     padding: 0;
     margin: 0;
-    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    min-height: 0;
     position: relative;
 }
 
@@ -58,9 +55,6 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     align-items: flex-end;
     height: 100%;
     width: 100%;
-    margin: 0;
-    padding: 0;
-    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .avatar-img {
@@ -74,12 +68,11 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     border: none !important;
     filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
     z-index: 1;
-    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     margin-bottom: -30px; 
     transform: translateX(15px); 
 }
 
-/* --- GLOBO GLASSMORPHISM (Clip-path de Claude) --- */
+/* --- GLOBO GLASSMORPHISM --- */
 .modern-bubble {
   box-sizing: border-box;
   width: fit-content;
@@ -92,8 +85,6 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
   border: none;
   border-radius: 0;
   box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
   overflow: visible;
   color: #fff;
   font-size: 13px;
@@ -133,20 +124,24 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 
 .modern-bubble::after {
   background: #EC5E17;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
   clip-path: polygon(evenodd, 0px 10px, 0.12px 8.44px, 0.49px 6.91px, 1.09px 5.46px, 1.91px 4.12px, 2.93px 2.93px, 4.12px 1.91px, 5.46px 1.09px, 6.91px 0.49px, 8.44px 0.12px, 10px 0px, calc(100% - 60px) 0px, calc(100% - 58.44px) 0.12px, calc(100% - 56.91px) 0.49px, calc(100% - 55.46px) 1.09px, calc(100% - 54.12px) 1.91px, calc(100% - 52.93px) 2.93px, calc(100% - 51.91px) 4.12px, calc(100% - 51.09px) 5.46px, calc(100% - 50.49px) 6.91px, calc(100% - 50.12px) 8.44px, calc(100% - 50px) 10px, calc(100% - 50px) calc(50% - 8px), calc(100% - 47.43px) calc(50% - 7.69px), calc(100% - 44.92px) calc(50% - 7.32px), calc(100% - 42.46px) calc(50% - 6.9px), calc(100% - 40.06px) calc(50% - 6.42px), calc(100% - 37.72px) calc(50% - 5.89px), calc(100% - 35.43px) calc(50% - 5.3px), calc(100% - 33.2px) calc(50% - 4.66px), calc(100% - 31.04px) calc(50% - 3.97px), calc(100% - 28.93px) calc(50% - 3.22px), calc(100% - 26.89px) calc(50% - 2.42px), calc(100% - 24.91px) calc(50% - 1.57px), calc(100% - 22.99px) calc(50% - 0.66px), calc(100% - 21.14px) calc(50% + 0.29px), calc(100% - 19.35px) calc(50% + 1.3px), calc(100% - 17.63px) calc(50% + 2.36px), calc(100% - 15.98px) calc(50% + 3.46px), calc(100% - 14.39px) calc(50% + 4.62px), calc(100% - 12.88px) calc(50% + 5.81px), calc(100% - 11.43px) calc(50% + 7.06px), calc(100% - 10.05px) calc(50% + 8.34px), calc(100% - 8.74px) calc(50% + 9.67px), calc(100% - 7.51px) calc(50% + 11.04px), calc(100% - 6.34px) calc(50% + 12.44px), calc(100% - 5.24px) calc(50% + 13.88px), calc(100% - 4.2px) calc(50% + 15.36px), calc(100% - 3.24px) calc(50% + 16.87px), calc(100% - 2.34px) calc(50% + 18.42px), calc(100% - 1.5px) calc(50% + 20px), calc(100% - 2.79px) calc(50% + 18.77px), calc(100% - 4.11px) calc(50% + 17.62px), calc(100% - 5.46px) calc(50% + 16.53px), calc(100% - 6.85px) calc(50% + 15.51px), calc(100% - 8.26px) calc(50% + 14.55px), calc(100% - 9.71px) calc(50% + 13.66px), calc(100% - 11.19px) calc(50% + 12.83px), calc(100% - 12.7px) calc(50% + 12.07px), calc(100% - 14.24px) calc(50% + 11.36px), calc(100% - 15.81px) calc(50% + 10.72px), calc(100% - 17.41px) calc(50% + 10.13px), calc(100% - 19.04px) calc(50% + 9.6px), calc(100% - 20.71px) calc(50% + 9.12px), calc(100% - 22.4px) calc(50% + 8.7px), calc(100% - 24.13px) calc(50% + 8.33px), calc(100% - 25.89px) calc(50% + 8.01px), calc(100% - 27.68px) calc(50% + 7.74px), calc(100% - 29.52px) calc(50% + 7.52px), calc(100% - 31.38px) calc(50% + 7.35px), calc(100% - 33.29px) calc(50% + 7.23px), calc(100% - 35.23px) calc(50% + 7.16px), calc(100% - 37.22px) calc(50% + 7.14px), calc(100% - 39.24px) calc(50% + 7.16px), calc(100% - 41.31px) calc(50% + 7.24px), calc(100% - 43.42px) calc(50% + 7.36px), calc(100% - 45.57px) calc(50% + 7.52px), calc(100% - 47.76px) calc(50% + 7.74px), calc(100% - 50px) calc(50% + 8px), calc(100% - 50px) calc(100% - 10px), calc(100% - 50.12px) calc(100% - 8.44px), calc(100% - 50.49px) calc(100% - 6.91px), calc(100% - 51.09px) calc(100% - 5.46px), calc(100% - 51.91px) calc(100% - 4.12px), calc(100% - 52.93px) calc(100% - 2.93px), calc(100% - 54.12px) calc(100% - 1.91px), calc(100% - 55.46px) calc(100% - 1.09px), calc(100% - 56.91px) calc(100% - 0.49px), calc(100% - 58.44px) calc(100% - 0.12px), calc(100% - 60px) 100%, 10px 100%, 8.44px calc(100% - 0.12px), 6.91px calc(100% - 0.49px), 5.46px calc(100% - 1.09px), 4.12px calc(100% - 1.91px), 2.93px calc(100% - 2.93px), 1.91px calc(100% - 4.12px), 1.09px calc(100% - 5.46px), 0.49px calc(100% - 6.91px), 0.12px calc(100% - 8.44px), 0px calc(100% - 10px), 0px 10px, 2px 10px, 2.1px 8.75px, 2.39px 7.53px, 2.87px 6.37px, 3.53px 5.3px, 4.34px 4.34px, 5.3px 3.53px, 6.37px 2.87px, 7.53px 2.39px, 8.75px 2.1px, 10px 2px, calc(100% - 60px) 2px, calc(100% - 58.75px) 2.1px, calc(100% - 57.53px) 2.39px, calc(100% - 56.37px) 2.87px, calc(100% - 55.3px) 3.53px, calc(100% - 54.34px) 4.34px, calc(100% - 53.53px) 5.3px, calc(100% - 52.87px) 6.37px, calc(100% - 52.39px) 7.53px, calc(100% - 52.1px) 8.75px, calc(100% - 52px) 10px, calc(100% - 52px) calc(50% - 5.7px), calc(100% - 50px) calc(50% - 5.7px), calc(100% - 48.2px) calc(50% - 5.48px), calc(100% - 46.43px) calc(50% - 5.24px), calc(100% - 44.68px) calc(50% - 4.97px), calc(100% - 42.97px) calc(50% - 4.67px), calc(100% - 41.29px) calc(50% - 4.34px), calc(100% - 39.63px) calc(50% - 3.99px), calc(100% - 38.01px) calc(50% - 3.61px), calc(100% - 36.42px) calc(50% - 3.21px), calc(100% - 34.86px) calc(50% - 2.77px), calc(100% - 33.33px) calc(50% - 2.31px), calc(100% - 31.83px) calc(50% - 1.83px), calc(100% - 30.36px) calc(50% - 1.32px), calc(100% - 28.93px) calc(50% - 0.78px), calc(100% - 27.52px) calc(50% - 0.22px), calc(100% - 26.15px) calc(50% + 0.37px), calc(100% - 24.82px) calc(50% + 0.98px), calc(100% - 23.52px) calc(50% + 1.62px), calc(100% - 22.25px) calc(50% + 2.28px), calc(100% - 21.01px) calc(50% + 2.97px), calc(100% - 19.81px) calc(50% + 3.68px), calc(100% - 18.64px) calc(50% + 4.41px), calc(100% - 17.51px) calc(50% + 5.17px), calc(100% - 16.41px) calc(50% + 5.95px), calc(100% - 15.35px) calc(50% + 6.75px), calc(100% - 14.32px) calc(50% + 7.57px), calc(100% - 13.33px) calc(50% + 8.41px), calc(100% - 12.37px) calc(50% + 9.27px), calc(100% - 11.45px) calc(50% + 10.15px), calc(100% - 12.6px) calc(50% + 9.61px), calc(100% - 13.76px) calc(50% + 9.1px), calc(100% - 14.94px) calc(50% + 8.62px), calc(100% - 16.14px) calc(50% + 8.17px), calc(100% - 17.35px) calc(50% + 7.75px), calc(100% - 18.58px) calc(50% + 7.37px), calc(100% - 19.82px) calc(50% + 7.01px), calc(100% - 21.08px) calc(50% + 6.68px), calc(100% - 22.35px) calc(50% + 6.38px), calc(100% - 23.64px) calc(50% + 6.11px), calc(100% - 24.95px) calc(50% + 5.86px), calc(100% - 26.28px) calc(50% + 5.65px), calc(100% - 27.62px) calc(50% + 5.46px), calc(100% - 28.98px) calc(50% + 5.29px), calc(100% - 30.35px) calc(50% + 5.16px), calc(100% - 31.75px) calc(50% + 5.05px), calc(100% - 33.16px) calc(50% + 4.96px), calc(100% - 34.59px) calc(50% + 4.9px), calc(100% - 36.04px) calc(50% + 4.87px), calc(100% - 37.51px) calc(50% + 4.86px), calc(100% - 39px) calc(50% + 4.88px), calc(100% - 40.51px) calc(50% + 4.92px), calc(100% - 42.04px) calc(50% + 4.99px), calc(100% - 43.59px) calc(50% + 5.08px), calc(100% - 45.16px) calc(50% + 5.2px), calc(100% - 46.75px) calc(50% + 5.34px), calc(100% - 48.37px) calc(50% + 5.51px), calc(100% - 50px) calc(50% + 5.7px), calc(100% - 52px) calc(50% + 5.7px), calc(100% - 52px) calc(100% - 10px), calc(100% - 52.1px) calc(100% - 8.75px), calc(100% - 52.39px) calc(100% - 7.53px), calc(100% - 52.87px) calc(100% - 6.37px), calc(100% - 53.53px) calc(100% - 5.3px), calc(100% - 54.34px) calc(100% - 4.34px), calc(100% - 55.3px) calc(100% - 3.53px), calc(100% - 56.37px) calc(100% - 2.87px), calc(100% - 57.53px) calc(100% - 2.39px), calc(100% - 58.75px) calc(100% - 2.1px), calc(100% - 60px) calc(100% - 2px), 10px calc(100% - 2px), 8.75px calc(100% - 2.1px), 7.53px calc(100% - 2.39px), 6.37px calc(100% - 2.87px), 5.3px calc(100% - 3.53px), 4.34px calc(100% - 4.34px), 3.53px calc(100% - 5.3px), 2.87px calc(100% - 6.37px), 2.39px calc(100% - 7.53px), 2.1px calc(100% - 8.75px), 2px calc(100% - 10px), 2px 10px);
 }
 
-/* --- SECCIÓN DEL CHAT --- */
+/* --- SECCIÓN DEL CHAT (ARREGLADA) --- */
 .chat-section {
-    flex: 0 0 0; 
-    opacity: 0;
+    display: none; /* Oculto inicialmente */
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
-    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.app-container.chat-mode .avatar-section {
+    display: none; /* Desaparece la sección del avatar grande */
+}
+
+.app-container.chat-mode .chat-section {
     display: flex;
     flex-direction: column;
-    min-height: 0;
 }
 
 .chat-box {
@@ -156,7 +151,7 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Asegura que los mensajes empiecen arriba */
+    justify-content: flex-start; /* Arriba, no centrado */
     gap: 15px;
     scrollbar-width: none;
 }
@@ -166,18 +161,13 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .message-row.user-row { justify-content: flex-end; }
 .message-row.bot-row { justify-content: flex-start; }
 
-/* Animación para el icono pequeño */
 .chat-avatar {
     width: 38px; height: 38px; border-radius: 50%;
     object-fit: cover; object-position: center 15%; 
     border: 2px solid var(--accent-color); background-color: var(--bg-black);
     flex-shrink: 0;
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-@keyframes popIn {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+    opacity: 0; /* Oculto hasta que el clon aterrice */
+    transition: opacity 0.1s;
 }
 
 .message { padding: 12px 18px; border-radius: 20px; max-width: 75%; line-height: 1.4; font-size: 0.95rem; }
@@ -210,109 +200,3 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .stop-btn { width: 36px; height: 36px; border-radius: 50%; background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
 .stop-square { width: 12px; height: 12px; background-color: #000000; border-radius: 2px; }
 .send-voice-btn { width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: white; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); }
-
-/* --- TRANSICIÓN DE VUELO (EL AVATAR VUELA HACIA EL CHAT) --- */
-.app-container.chat-mode .avatar-wrapper {
-    /* Vuela hacia la esquina superior izquierda y se encoge */
-    transform: translate(-45vw, -35vh) scale(0.1);
-    opacity: 0;
-    pointer-events: none;
-}
-
-.app-container.chat-mode .avatar-section {
-    flex: 0;
-    overflow: hidden;
-}
-
-.app-container.chat-mode .chat-section {
-    flex: 1; 
-    opacity: 1;
-    overflow: visible;
-}
-
-/* --- ANIMACIÓN LIMPIA (FADE & SCALE) --- */
-.avatar-wrapper {
-    will-change: transform, opacity; /* Acelera la animación por GPU */
-    backface-visibility: hidden;
-}
-
-.app-container.chat-mode .avatar-wrapper {
-    /* En lugar de volar, se encoge y se desvanece en su lugar */
-    transform: scale(0.8);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.app-container.chat-mode .avatar-section {
-    flex: 0;
-    height: 0; /* Se colapsa suavemente */
-    transition: all 0.4s ease;
-    overflow: hidden;
-}
-
-/* El mensaje del bot aparece con un fade-in elegante */
-.message-row {
-    will-change: transform, opacity;
-}
-
-/* --- EFECTO DE ENCAPSULAMIENTO PERFECTO --- */
-
-.avatar-wrapper {
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-}
-
-.avatar-img {
-    will-change: width, height, border-radius, border;
-}
-
-.app-container.chat-mode .avatar-wrapper {
-    /* Mueve el avatar a la esquina superior izquierda (posición del icono) */
-    transform: translate(-38vw, -36vh);
-    z-index: 999;
-}
-
-.app-container.chat-mode .avatar-img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    object-position: center 15%;
-    background-color: var(--bg-black);
-    
-    /* El truco: la posición y tamaño tardan 0.6s, pero el circulo y borde cierran rápido al final (delay) */
-    transition: width 0.6s ease-in, height 0.6s ease-in, 
-                border-radius 0.2s ease-in 0.4s, 
-                border 0.1s ease-in 0.5s;
-                
-    border-radius: 50%;
-    border: 2px solid var(--accent-color);
-    filter: drop-shadow(0 0 10px var(--accent-glow));
-}
-
-/* Oculta el globo inmediatamente */
-.app-container.chat-mode .modern-bubble {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-}
-
-/* Colapsa la sección para dar paso al chat */
-.app-container.chat-mode .avatar-section {
-    flex: 0 0 0px;
-    height: 0;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-.app-container.chat-mode .chat-section {
-    flex: 1;
-    opacity: 1;
-}
-
-/* Clase que se activa por JS justo al aterrizar para ocultar el avatar volador */
-.avatar-wrapper.hide-avatar {
-    opacity: 0;
-    transition: opacity 0.1s;
-}
