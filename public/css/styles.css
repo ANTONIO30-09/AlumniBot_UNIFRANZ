@@ -29,16 +29,12 @@ body {
     position: relative;
 }
 
-header { 
-    flex-shrink: 0; 
-    text-align: center; 
-    padding: 15px; 
-}
+header { flex-shrink: 0; text-align: center; padding: 15px; }
 header h1 { margin: 0; font-size: 1.6rem; font-weight: 800; }
 header h1 span { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
 header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 
-/* --- SECCIÓN AVATAR (ONBOARDING) --- */
+/* --- ONBOARDING --- */
 .avatar-section {
     flex: 1; 
     display: flex;
@@ -89,11 +85,11 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     margin-bottom: -10px; 
 }
 
-/* --- BURBUJA ESTILO CÓMIC (Saliendo de la boca) --- */
+/* --- BURBUJA A LA IZQUIERDA --- */
 .modern-bubble {
     position: absolute;
-    top: 25%; /* Al nivel de la boca */
-    right: 5%; /* A la derecha de la cara */
+    top: 25%;
+    left: 5%; /* A la izquierda */
     background: var(--text-light);
     color: var(--bg-dark);
     padding: 12px 20px;
@@ -106,15 +102,14 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     transition: all 0.4s ease;
     max-width: 180px;
 }
-/* Pico de la burbuja apuntando a la izquierda (a la boca) */
 .modern-bubble::after {
     content: '';
     position: absolute;
     top: 20px;
-    left: -10px;
-    border-width: 10px 10px 10px 0;
+    right: -10px; /* Pico apuntando a la derecha */
+    border-width: 10px 0 10px 10px;
     border-style: solid;
-    border-color: transparent var(--text-light) transparent transparent;
+    border-color: transparent transparent transparent var(--text-light);
 }
 
 /* --- SECCIÓN DEL CHAT --- */
@@ -135,54 +130,30 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start; /* Arregla el centrado vertical */
     gap: 15px;
     scrollbar-width: none;
 }
 .chat-box::-webkit-scrollbar { display: none; }
 
-.message-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 10px;
-    width: 100%;
-    animation: fadeIn 0.4s ease;
-}
-
+.message-row { display: flex; align-items: flex-end; gap: 10px; width: 100%; animation: fadeIn 0.4s ease; }
 .message-row.user-row { justify-content: flex-end; }
 .message-row.bot-row { justify-content: flex-start; }
 
 .chat-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center 15%; 
-    border: 2px solid var(--accent-color);
-    background-color: var(--bg-black);
+    width: 38px; height: 38px; border-radius: 50%;
+    object-fit: cover; object-position: center 15%; 
+    border: 2px solid var(--accent-color); background-color: var(--bg-black);
     flex-shrink: 0;
 }
 
-.message { 
-    padding: 12px 18px; 
-    border-radius: 20px; 
-    max-width: 75%; 
-    line-height: 1.4; 
-    font-size: 0.95rem; 
-}
-
+.message { padding: 12px 18px; border-radius: 20px; max-width: 75%; line-height: 1.4; font-size: 0.95rem; }
 .bot-message { background-color: var(--bot-msg); color: var(--text-light); border-bottom-left-radius: 4px; }
 .user-message { background-color: var(--user-msg); color: #FFFFFF; border-bottom-right-radius: 4px; }
-
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- INPUT FIJO --- */
-.input-wrapper { 
-    flex-shrink: 0; 
-    padding: 10px 15px; 
-    padding-bottom: max(15px, env(safe-area-inset-bottom)); 
-    background: transparent;
-    z-index: 10;
-}
+/* --- INPUT Y GRABACIÓN --- */
+.input-wrapper { flex-shrink: 0; padding: 10px 15px; padding-bottom: max(15px, env(safe-area-inset-bottom)); background: transparent; z-index: 10; }
 .input-area { display: flex; align-items: center; background-color: var(--bot-msg); border-radius: 30px; padding: 8px 10px 8px 20px; border: 1px solid #3A3A3A; }
 #text-input { flex: 1; background: transparent; border: none; color: white; font-size: 1rem; outline: none; }
 #text-input::placeholder { color: var(--text-muted); }
@@ -192,9 +163,16 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .btn-mic { background-color: transparent; color: var(--text-muted); }
 .hidden { display: none !important; }
 
-/* --- TRANSICIÓN DE VUELO (AVATAR SE VA AL ICONO) --- */
+/* Barra de grabación */
+.recording-bar { background-color: var(--bot-msg); border-radius: 30px; padding: 8px 15px; display: flex; align-items: center; gap: 15px; }
+.plus-btn { background: transparent; color: var(--text-muted); font-size: 24px; border: none; cursor:pointer;}
+#waveform { flex: 1; height: 30px; background: transparent; }
+.stop-btn { width: 36px; height: 36px; border-radius: 50%; background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+.stop-square { width: 12px; height: 12px; background-color: #000000; border-radius: 2px; }
+.send-voice-btn { width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: white; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); }
+
+/* --- TRANSICIÓN DE VUELO --- */
 .app-container.chat-mode .avatar-wrapper {
-    /* Mueve el avatar a la esquina superior izquierda y lo encoge al tamaño del icono (38px) */
     transform: translate(-40vw, -35vh) scale(0.1);
     opacity: 0;
     pointer-events: none;
