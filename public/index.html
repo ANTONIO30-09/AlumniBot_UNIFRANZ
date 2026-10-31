@@ -16,7 +16,7 @@
         <!-- Contenedor del Avatar -->
         <div class="avatar-section" id="avatar-section">
             <div class="avatar-wrapper">
-                <!-- Globo de texto moderno -->
+                <!-- Globo de texto a la izquierda -->
                 <div class="modern-bubble" id="modern-bubble">
                     ¡Hola! Soy AlumniBot.<br>¿En qué puedo ayudarte?
                 </div>
@@ -31,6 +31,7 @@
 
         <!-- Input Fijo -->
         <div class="input-wrapper" id="input-wrapper">
+            <!-- Barra de texto normal -->
             <div class="input-area" id="normal-input-area">
                 <input type="text" id="text-input" placeholder="Escribe o dicta tu mensaje..." autocomplete="off">
                 <button id="send-btn" class="btn-send" title="Enviar mensaje">
@@ -38,6 +39,18 @@
                 </button>
                 <button id="mic-btn" class="btn-mic" title="Iniciar dictado">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                </button>
+            </div>
+
+            <!-- Barra de Grabación (Oculta) -->
+            <div class="input-area recording-bar hidden" id="recording-bar">
+                <button class="icon-btn plus-btn" title="Adjuntar">+</button>
+                <canvas id="waveform" width="300" height="40"></canvas>
+                <button id="stop-rec-btn" class="icon-btn stop-btn" title="Detener y editar">
+                    <div class="stop-square"></div>
+                </button>
+                <button id="send-rec-btn" class="icon-btn send-voice-btn" title="Enviar audio">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                 </button>
             </div>
         </div>
