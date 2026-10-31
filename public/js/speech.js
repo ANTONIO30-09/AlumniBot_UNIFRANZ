@@ -5,6 +5,7 @@ let audioContext;
 let analyser;
 let dataArray;
 let animationFrameId;
+let barHeights = []; // Almacena la altura actual de cada barra para la interpolación
 
 function speak(text) {
     if (synth.speaking) synth.cancel();
@@ -52,23 +53,35 @@ function stopRecording() {
     });
 }
 
-// --- Lógica del Waveform Corregida ---
+// --- Lógica del Waveform Fluido ---
 function startVisualizer(stream) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
     const source = audioContext.createMediaStreamSource(stream);
     source.connect(analyser);
     
+    // Aumentamos el suavizado nativo del audio (0.8 por defecto, 0.9 es más suave)
+    analyser.smoothingTimeConstant = 0.85; 
     analyser.fftSize = 256;
+    
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
     const canvas = document.getElementById('waveform');
     const canvasCtx = canvas.getContext('2d');
     
-    // FIJAMOS EL TAMAÑO INTERNO (No dependemos del CSS que puede ser 0 si está oculto)
     canvas.width = 600;
     canvas.height = 100;
+
+    // Configuración de las líneas (más delgadas para mayor fluidez)
+    const barWidth = 2;
+    const gap = 4;
+    const totalBars = Math.floor(canvas.width / (barWidth + gap));
+    
+    // Inicializar el array de alturas si cambió el tamaño
+    if (barHeights.length !== totalBars) {
+        barHeights = new Array(totalBars).fill(0);
+    }
 
     function draw() {
         animationFrameId = requestAnimationFrame(draw);
@@ -76,25 +89,28 @@ function startVisualizer(stream) {
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const barWidth = 4;   // Grosor de la línea
-        const gap = 6;        // Espacio entre líneas
-        const totalBars = Math.floor(canvas.width / (barWidth + gap));
-        
         const startX = (canvas.width - (totalBars * (barWidth + gap))) / 2;
         let x = startX;
 
         for (let i = 0; i < totalBars; i++) {
             const dataIndex = Math.floor((i / totalBars) * bufferLength);
-            const value = dataArray[dataIndex];
+            const targetHeight = (dataArray[dataIndex] / 255) * canvas.height;
             
-            let barHeight = (value / 255) * canvas.height;
-            const minHeight = 6; // Altura mínima para que se vea como puntos
-            barHeight = Math.max(barHeight, minHeight);
+            // --- MAGIA DE LA FLUIDEZ ---
+            // En lugar de igualar la altura de golpe, interpolamos gradualmente
+            // 0.25 significa que avanza un 25% hacia el objetivo en cada frame
+            barHeights[i] += (targetHeight - barHeights[i]) * 0.25; 
+            
+            let currentHeight = barHeights[i];
+            const minHeight = 4; // Puntos mínimos cuando hay silencio
+            currentHeight = Math.max(currentHeight, minHeight);
 
-            canvasCtx.fillStyle = '#e4e4e7'; 
+            canvasCtx.fillStyle = '#e4e4e7'; // Color gris claro
             
+            // Dibujar línea tipo píldora
             canvasCtx.beginPath();
-            canvasCtx.roundRect(x, (canvas.height - barHeight) / 2, barWidth, barHeight, 2);
+            // roundRect(x, y, width, height, radius)
+            canvasCtx.roundRect(x, (canvas.height - currentHeight) / 2, barWidth, currentHeight, 1);
             canvasCtx.fill();
 
             x += barWidth + gap;
@@ -106,6 +122,7 @@ function startVisualizer(stream) {
 function stopVisualizer() {
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     if (audioContext) audioContext.close();
+    barHeights = []; // Limpiar array
 }
 
 window.speechAPI = { speak, startRecording, stopRecording };
