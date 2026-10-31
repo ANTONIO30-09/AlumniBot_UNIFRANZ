@@ -52,14 +52,13 @@ function stopRecording() {
     });
 }
 
-// --- Lógica del Waveform (Líneas delgadas) ---
+// --- Lógica del Waveform Corregida ---
 function startVisualizer(stream) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
     const source = audioContext.createMediaStreamSource(stream);
     source.connect(analyser);
     
-    // FFT más grande para tener más barras (líneas)
     analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
@@ -67,45 +66,35 @@ function startVisualizer(stream) {
     const canvas = document.getElementById('waveform');
     const canvasCtx = canvas.getContext('2d');
     
-    // Ajustar resolución del canvas para que no se vea borroso
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * 2;
-    canvas.height = rect.height * 2;
-    canvasCtx.scale(2, 2);
+    // FIJAMOS EL TAMAÑO INTERNO (No dependemos del CSS que puede ser 0 si está oculto)
+    canvas.width = 600;
+    canvas.height = 100;
 
     function draw() {
         animationFrameId = requestAnimationFrame(draw);
         analyser.getByteFrequencyData(dataArray);
 
-        // Limpiar canvas (transparente)
-        canvasCtx.clearRect(0, 0, rect.width, rect.height);
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const barWidth = 2; // Grosor de la línea
-        const gap = 3;      // Espacio entre líneas
-        const totalBars = Math.floor(rect.width / (barWidth + gap));
+        const barWidth = 4;   // Grosor de la línea
+        const gap = 6;        // Espacio entre líneas
+        const totalBars = Math.floor(canvas.width / (barWidth + gap));
         
-        // Calcular desde dónde empezar a dibujar para que quede centrado
-        const startX = (rect.width - (totalBars * (barWidth + gap))) / 2;
+        const startX = (canvas.width - (totalBars * (barWidth + gap))) / 2;
         let x = startX;
 
         for (let i = 0; i < totalBars; i++) {
-            // Mapear el índice del array al ancho del canvas
             const dataIndex = Math.floor((i / totalBars) * bufferLength);
             const value = dataArray[dataIndex];
             
-            // Altura proporcional
-            let barHeight = (value / 255) * rect.height;
-            
-            // Altura mínima para que parezca una línea punteada cuando hay silencio
-            const minHeight = 3;
+            let barHeight = (value / 255) * canvas.height;
+            const minHeight = 6; // Altura mínima para que se vea como puntos
             barHeight = Math.max(barHeight, minHeight);
 
-            // Color gris claro
             canvasCtx.fillStyle = '#e4e4e7'; 
             
-            // Dibujar rectángulo redondeado (píldora)
             canvasCtx.beginPath();
-            canvasCtx.roundRect(x, (rect.height - barHeight) / 2, barWidth, barHeight, 1);
+            canvasCtx.roundRect(x, (canvas.height - barHeight) / 2, barWidth, barHeight, 2);
             canvasCtx.fill();
 
             x += barWidth + gap;
