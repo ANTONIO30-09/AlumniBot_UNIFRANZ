@@ -28,8 +28,6 @@ async function startRecording() {
         };
 
         mediaRecorder.start();
-        
-        // Iniciar visualizador
         startVisualizer(stream);
         return true;
     } catch (err) {
@@ -54,38 +52,63 @@ function stopRecording() {
     });
 }
 
-// --- Lógica del Waveform ---
+// --- Lógica del Waveform (Líneas delgadas) ---
 function startVisualizer(stream) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
     const source = audioContext.createMediaStreamSource(stream);
     source.connect(analyser);
     
-    analyser.fftSize = 64;
+    // FFT más grande para tener más barras (líneas)
+    analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
     const canvas = document.getElementById('waveform');
     const canvasCtx = canvas.getContext('2d');
+    
+    // Ajustar resolución del canvas para que no se vea borroso
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * 2;
+    canvas.height = rect.height * 2;
+    canvasCtx.scale(2, 2);
 
     function draw() {
         animationFrameId = requestAnimationFrame(draw);
         analyser.getByteFrequencyData(dataArray);
 
-        canvasCtx.fillStyle = '#1a1a1a'; // Fondo
-        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+        // Limpiar canvas (transparente)
+        canvasCtx.clearRect(0, 0, rect.width, rect.height);
 
-        const barWidth = (canvas.width / bufferLength) * 2.5;
-        let x = 0;
+        const barWidth = 2; // Grosor de la línea
+        const gap = 3;      // Espacio entre líneas
+        const totalBars = Math.floor(rect.width / (barWidth + gap));
+        
+        // Calcular desde dónde empezar a dibujar para que quede centrado
+        const startX = (rect.width - (totalBars * (barWidth + gap))) / 2;
+        let x = startX;
 
-        for (let i = 0; i < bufferLength; i++) {
-            const barHeight = (dataArray[i] / 255) * canvas.height;
+        for (let i = 0; i < totalBars; i++) {
+            // Mapear el índice del array al ancho del canvas
+            const dataIndex = Math.floor((i / totalBars) * bufferLength);
+            const value = dataArray[dataIndex];
             
-            // Color gris claro para las ondas
-            canvasCtx.fillStyle = '#e2e8f0'; 
-            canvasCtx.fillRect(x, (canvas.height - barHeight) / 2, barWidth, barHeight);
+            // Altura proporcional
+            let barHeight = (value / 255) * rect.height;
             
-            x += barWidth + 1;
+            // Altura mínima para que parezca una línea punteada cuando hay silencio
+            const minHeight = 3;
+            barHeight = Math.max(barHeight, minHeight);
+
+            // Color gris claro
+            canvasCtx.fillStyle = '#e4e4e7'; 
+            
+            // Dibujar rectángulo redondeado (píldora)
+            canvasCtx.beginPath();
+            canvasCtx.roundRect(x, (rect.height - barHeight) / 2, barWidth, barHeight, 1);
+            canvasCtx.fill();
+
+            x += barWidth + gap;
         }
     }
     draw();
