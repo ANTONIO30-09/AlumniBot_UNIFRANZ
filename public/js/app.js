@@ -3,7 +3,12 @@ const textInput = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDiv = document.getElementById('status');
-const recIndicator = document.getElementById('recording-indicator');
+
+// Elementos de la barra de grabación
+const normalInputArea = document.getElementById('normal-input-area');
+const recordingBar = document.getElementById('recording-bar');
+const stopRecBtn = document.getElementById('stop-rec-btn');
+const sendRecBtn = document.getElementById('send-rec-btn');
 
 let isRecording = false;
 
@@ -42,25 +47,33 @@ async function sendMessage(message) {
     }
 }
 
-sendBtn.addEventListener('click', () => {
-    if (isRecording) stopRecordingAndTranscribe();
-    sendMessage(textInput.value);
-});
-
+// --- Modo Texto ---
+sendBtn.addEventListener('click', () => sendMessage(textInput.value));
 textInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        if (isRecording) stopRecordingAndTranscribe();
-        sendMessage(textInput.value);
-    }
+    if (e.key === 'Enter') sendMessage(textInput.value);
 });
 
-async function stopRecordingAndTranscribe() {
-    isRecording = false;
-    micBtn.classList.remove('listening');
-    recIndicator.classList.add('hidden');
-    statusDiv.textContent = "Procesando audio...";
+// --- Modo Grabación ---
+async function startRecordingUI() {
+    const success = await window.speechAPI.startRecording();
+    if (success) {
+        isRecording = true;
+        normalInputArea.classList.add('hidden');
+        recordingBar.classList.remove('hidden');
+        statusDiv.textContent = "Grabando audio...";
+    } else {
+        statusDiv.textContent = "No se pudo acceder al micrófono.";
+    }
+}
 
+async function stopRecordingUI(action) { // action = 'stop' | 'send'
+    isRecording = false;
+    statusDiv.textContent = "Procesando audio...";
+    
     const audioBlob = await window.speechAPI.stopRecording();
+    recordingBar.classList.add('hidden');
+    normalInputArea.classList.remove('hidden');
+
     if (!audioBlob) {
         statusDiv.textContent = "No se grabó audio.";
         return;
@@ -77,32 +90,26 @@ async function stopRecordingAndTranscribe() {
         const data = await response.json();
         
         if (data.text) {
-            textInput.value = data.text;
-            statusDiv.textContent = "Texto transcrito. Puedes editarlo o enviarlo.";
+            if (action === 'send') {
+                // Si presionó enviar directamente, mandamos el mensaje sin mostrar el texto en el input
+                sendMessage(data.text);
+            } else {
+                // Si presionó detener, mostramos el texto para que lo edite
+                textInput.value = data.text;
+                statusDiv.textContent = "Texto listo. Puedes editarlo o enviarlo.";
+            }
         } else {
             statusDiv.textContent = "Error al transcribir.";
         }
     } catch (error) {
-        console.error("Error de transcripción:", error);
+        console.error("Error:", error);
         statusDiv.textContent = "Error de red al transcribir.";
     }
 }
 
-micBtn.addEventListener('click', async () => {
-    if (isRecording) {
-        await stopRecordingAndTranscribe();
-    } else {
-        const success = await window.speechAPI.startRecording();
-        if (success) {
-            isRecording = true;
-            micBtn.classList.add('listening');
-            recIndicator.classList.remove('hidden');
-            statusDiv.textContent = "Grabando... Habla ahora.";
-        } else {
-            statusDiv.textContent = "No se pudo acceder al micrófono.";
-        }
-    }
-});
+micBtn.addEventListener('click', startRecordingUI);
+stopRecBtn.addEventListener('click', () => stopRecordingUI('stop'));
+sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
 
 // Inicializar estado
 statusDiv.textContent = "Presiona el micrófono para hablar";

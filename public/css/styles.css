@@ -49,11 +49,8 @@ header p { margin: 5px 0 0; font-size: 0.9rem; color: #94a3b8; }
     background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
 }
 
-.avatar { width: 120px; height: 120px; }
-
-#mouth {
-    transition: d 0.1s ease;
-}
+.avatar { width: 100px; height: 100px; }
+#mouth { transition: d 0.1s ease; }
 
 .status {
     margin-top: 10px;
@@ -91,14 +88,19 @@ header p { margin: 5px 0 0; font-size: 0.9rem; color: #94a3b8; }
     border-bottom-right-radius: 0;
 }
 
+/* Estilos generales de entrada */
 .input-area {
     display: flex;
     padding: 15px;
     background-color: #0f172a;
     gap: 10px;
+    align-items: center;
 }
 
-input {
+.hidden { display: none !important; }
+
+/* Modo Texto */
+#text-input {
     flex: 1;
     padding: 12px;
     border-radius: 8px;
@@ -107,8 +109,7 @@ input {
     color: white;
     outline: none;
 }
-
-input:focus { border-color: var(--accent-color); }
+#text-input:focus { border-color: var(--accent-color); }
 
 button {
     padding: 12px;
@@ -130,42 +131,35 @@ button {
     justify-content: center;
 }
 
-.btn-mic.listening {
-    background-color: #ef4444;
-    animation: pulse 1.5s infinite;
+/* Modo Grabación (Nuevo) */
+.recording-bar {
+    background-color: #1a1a1a;
+    border-radius: 30px;
+    padding: 8px 12px;
 }
 
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-}
-
-/* Indicador de grabación */
-.recording-indicator {
-    margin-top: 10px;
-    color: #ef4444;
-    font-weight: bold;
+.icon-btn {
+    background: transparent;
+    color: white;
+    padding: 8px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
+    justify-content: center;
 }
 
-.recording-indicator.hidden {
-    display: none;
-}
+.icon-btn:hover { background: rgba(255,255,255,0.1); }
 
-.dot {
-    width: 10px;
-    height: 10px;
-    background-color: #ef4444;
-    border-radius: 50%;
-    animation: blink 1s infinite;
-}
+.stop-btn { color: #ef4444; }
 
-@keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0.3; }
-    100% { opacity: 1; }
+.send-btn {
+    background-color: #6b21a8; /* Morado similar a la imagen */
+    color: white;
+}
+.send-btn:hover { background-color: #7e22ce; }
+
+#waveform {
+    flex: 1;
+    height: 40px;
+    background: transparent;
 }
