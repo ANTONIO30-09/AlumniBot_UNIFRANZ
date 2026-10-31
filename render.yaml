@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: alumnibot-unifranz
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: GROQ_API_KEY
+        sync: false # Esto le dice a Render que te pedirá la llave en su panel de control (seguridad)
