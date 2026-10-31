@@ -4,8 +4,9 @@
   "description": "Asistente virtual interactivo con avatar y audio para la Red Alumni y la Feria de Empleabilidad de UNIFRANZ.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js"
+    "test": "node --test",
+    "start": "node server/index.js",
+    "stress": "node scripts/stress-chat.js"
   },
   "keywords": [],
   "author": "",
