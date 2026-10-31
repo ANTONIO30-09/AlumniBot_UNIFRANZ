@@ -211,10 +211,12 @@ button {
 
 /* --- NUEVAS ANIMACIONES DEL AVATAR --- */
 .avatar-img {
-    width: 130px; /* Ajusta el tamaño según tu imagen */
-    height: auto;
+    width: 120px; /* Ajusta el tamaño según tu imagen */
+    height: 120px;
     border-radius: 50%; /* Hace que la imagen sea circular */
     object-fit: cover;
+    object-position: center 25%; /* Enfoca la cara (parte superior) */
+    box-shadow: 0 8px 16px rgba(236, 94, 23, 0.2); /* Sombra naranja suave */
     background-color: var(--bot-msg);
     border: 3px solid var(--accent-color);
     
@@ -241,10 +243,12 @@ button {
 
 /* --- NUEVAS ANIMACIONES DEL AVATAR --- */
 .avatar-img {
-    width: 130px; 
-    height: auto;
+    width: 120px; 
+    height: 120px;
     border-radius: 50%; 
     object-fit: cover;
+    object-position: center 25%; /* Enfoca la cara (parte superior) */
+    box-shadow: 0 8px 16px rgba(236, 94, 23, 0.2); /* Sombra naranja suave */
     background-color: var(--bot-msg);
     border: 3px solid var(--accent-color);
     
