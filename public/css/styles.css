@@ -295,3 +295,59 @@ body {
     from { transform: translateY(-10px) scale(1); filter: drop-shadow(0 15px 25px rgba(236, 94, 23, 0.7)); }
     to { transform: translateY(-15px) scale(1.05); filter: drop-shadow(0 25px 35px rgba(236, 94, 23, 1)); }
 }
+
+/* --- EFECTO 2.5D PREMIUM --- */
+.avatar-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Resplandor de fondo (simula la luz 3D) */
+.avatar-container::before {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: var(--accent-color);
+    filter: blur(60px);
+    opacity: 0.4;
+    z-index: 0;
+    top: 20%;
+    border-radius: 50%;
+}
+
+.avatar-img {
+    width: 220px;
+    height: auto;
+    object-fit: contain;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important; 
+    position: relative;
+    z-index: 1;
+    /* Sombra que sigue la silueta del PNG */
+    filter: drop-shadow(0px 15px 25px rgba(0, 0, 0, 0.8));
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Ocultar el cuadro negro si la imagen lo tiene incrustado */
+.chat-container {
+    background: transparent;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.avatar-img.speaking {
+    animation: speakBounce 0.15s infinite alternate;
+}
+
+@keyframes speakBounce {
+    from { transform: scale(1.02) translateY(-10px); filter: drop-shadow(0px 20px 30px rgba(236, 94, 23, 0.7)); }
+    to { transform: scale(1.05) translateY(-15px); filter: drop-shadow(0px 30px 40px rgba(236, 94, 23, 1)); }
+}
