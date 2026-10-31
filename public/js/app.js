@@ -114,16 +114,29 @@ micBtn.addEventListener('click', startRecordingUI);
 stopRecBtn.addEventListener('click', () => stopRecordingUI('stop'));
 sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
 
+
+
 /* ==========================================================
-   FLIP: el avatar grande se encoge y vuela hasta el primer
-   .chat-avatar del chat. First -> Last -> Invert -> Play.
+   FLIP v4: anticipación con elevación, vuelo en arco con estela,
+   la escala se adelanta a la posición, fundido cruzado sin salto
+   al aterrizar y onda naranja independiente.
    ========================================================== */
 (() => {
-  const DURATION = 600;                              // ms (0.6s)
-  const EASING = 'cubic-bezier(0.65, 0, 0.35, 1)';   // ease-in-out suave
-  const SETTLE_MS = 0;       // sube este valor si tu layout tiene transition al entrar en chat-mode
-  const WAIT_CHAT_MODE = 1000;
-  const WAIT_TARGET = 1500;
+  if (window.__alumniFlipV4) return;
+  window.__alumniFlipV4 = true;
+
+  const CFG = {
+    duration: 950,                                  // ms totales
+    face: { cx: 0.5, cy: 0.26, size: 0.42 },        // zona de la cara dentro de #bot-avatar
+    arc: 0.22,                                      // curvatura del arco (0 = recta)
+    tilt: 6,                                        // grados de inclinación en vuelo
+    stretch: 0.035,                                 // squash & stretch (0 = ninguno)
+    trail: 2,                                       // copias de estela (0 = sin estela)
+    settle: 0,                                      // ms extra si chat-mode tiene transition
+    waitChatMode: 1000,
+    waitTarget: 1500,
+    accent: '236, 94, 23'
+  };
   const HIDE = 'flip-hidden';
   const INPUT_SEL = [
     '#user-input', '#message-input', '#chat-input', '#input',
@@ -131,11 +144,15 @@ sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
     'input[type="text"]', 'textarea'
   ].join(',');
 
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const easeInOut = (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2);
+  const easeInOutS = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const frames = (n) => new Promise((res) => {
     const step = () => (--n <= 0 ? res() : requestAnimationFrame(step));
     requestAnimationFrame(step);
   });
-  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const init = () => {
     const container = document.querySelector('.app-container');
@@ -144,18 +161,11 @@ sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
     if (container.classList.contains('chat-mode')) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    let busy = false;
-    let finished = false;
-
+    let busy = false, finished = false;
     const findTarget = () => document.querySelector('.chat-avatar');
 
-    // Devuelve el primer .chat-avatar (lo oculta en cuanto existe) o null si no aparece a tiempo
     const ensureTarget = () => new Promise((res) => {
-      const grab = () => {
-        const t = findTarget();
-        if (t) t.classList.add(HIDE);
-        return t;
-      };
+      const grab = () => { const t = findTarget(); if (t) t.classList.add(HIDE); return t; };
       const now = grab();
       if (now) return res(now);
       const mo = new MutationObserver(() => {
@@ -163,18 +173,16 @@ sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
         if (t) { mo.disconnect(); clearTimeout(to); res(t); }
       });
       mo.observe(document.body, { childList: true, subtree: true });
-      const to = setTimeout(() => { mo.disconnect(); res(null); }, WAIT_TARGET);
+      const to = setTimeout(() => { mo.disconnect(); res(null); }, CFG.waitTarget);
     });
 
     const whenChatMode = () => new Promise((res) => {
       if (container.classList.contains('chat-mode')) return res(true);
       const mo = new MutationObserver(() => {
-        if (container.classList.contains('chat-mode')) {
-          mo.disconnect(); clearTimeout(to); res(true);
-        }
+        if (container.classList.contains('chat-mode')) { mo.disconnect(); clearTimeout(to); res(true); }
       });
       mo.observe(container, { attributes: true, attributeFilter: ['class'] });
-      const to = setTimeout(() => { mo.disconnect(); res(false); }, WAIT_CHAT_MODE);
+      const to = setTimeout(() => { mo.disconnect(); res(false); }, CFG.waitChatMode);
     });
 
     const radiusPx = (el, w, h) => {
@@ -187,250 +195,186 @@ sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
       // ---------- FIRST ----------
       const first = avatar.getBoundingClientRect();
       if (!first.width || !first.height) { busy = false; return; }
+      const W = first.width, H = first.height;
 
-      // Clon fijo exactamente encima del avatar grande
+      const S = Math.min(W, CFG.face.size * H);
+      const x0 = clamp(CFG.face.cx * W - S / 2, 0, W - S);
+      const y0 = clamp(CFG.face.cy * H - S / 2, 0, H - S);
+
       const cs = getComputedStyle(avatar);
-      const clone = avatar.cloneNode(true);
-      clone.removeAttribute('id');
-      Object.assign(clone.style, {
-        position: 'fixed',
-        top: first.top + 'px',
-        left: first.left + 'px',
-        width: first.width + 'px',
-        height: first.height + 'px',
-        margin: '0',
-        maxWidth: 'none',
-        maxHeight: 'none',
-        transform: 'none',
-        transformOrigin: '0 0',
-        opacity: '1',
-        objectFit: cs.objectFit,
-        objectPosition: cs.objectPosition,
-        zIndex: '9999',
-        pointerEvents: 'none',
-        willChange: 'transform, clip-path'
-      });
-      document.body.appendChild(clone);
-      avatar.style.visibility = 'hidden';          // el clon ocupa su lugar
-
-      const cleanup = () => {
-        clone.remove();
-        avatar.style.visibility = '';
-        document.querySelectorAll('.chat-avatar.' + HIDE)
-          .forEach((el) => el.classList.remove(HIDE));
+      const makeWrap = () => {
+        const w = document.createElement('div');
+        Object.assign(w.style, {
+          position: 'fixed', top: first.top + 'px', left: first.left + 'px',
+          width: W + 'px', height: H + 'px', margin: '0', padding: '0',
+          zIndex: '9999', pointerEvents: 'none', willChange: 'transform, filter, opacity'
+        });
+        const c = avatar.cloneNode(true);
+        c.removeAttribute('id');
+        Object.assign(c.style, {
+          position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
+          margin: '0', maxWidth: 'none', maxHeight: 'none', transform: 'none',
+          opacity: '1', animation: 'none', transition: 'none', filter: 'none',
+          objectFit: cs.objectFit, objectPosition: cs.objectPosition,
+          clipPath: 'inset(0px 0px 0px 0px round 0px)', willChange: 'clip-path'
+        });
+        w.appendChild(c);
+        return { w, c };
       };
 
-      // Si el icono ya existe, se oculta ya (antes de cualquier pintado)
+      const main = makeWrap();
+      const ghosts = [];
+      for (let k = 1; k <= CFG.trail; k++) {
+        const g = makeWrap();
+        g.w.style.opacity = '0';
+        g.w.style.zIndex = String(9998 - k);
+        ghosts.push({ ...g, k });
+        document.body.appendChild(g.w);
+      }
+      document.body.appendChild(main.w);
+      avatar.style.visibility = 'hidden';
+
+      const bubble = document.querySelector('.modern-bubble');
+      let bubbleAnim = null;
+      if (bubble) bubbleAnim = bubble.animate([{ opacity: 1 }, { opacity: 0 }],
+        { duration: 220, easing: 'ease-out', fill: 'forwards' });
+
+      const cleanup = () => {
+        main.w.remove();
+        ghosts.forEach((g) => g.w.remove());
+        avatar.style.visibility = '';
+        if (bubbleAnim) bubbleAnim.cancel();
+        document.querySelectorAll('.chat-avatar.' + HIDE).forEach((el) => el.classList.remove(HIDE));
+      };
+
       const early = findTarget();
       if (early) early.classList.add(HIDE);
 
-      // El layout cambia (chat-mode) mientras el clon sigue en su sitio
       const ok = await whenChatMode();
-      if (!ok) { cleanup(); busy = false; return; }   // no hubo chat-mode: se reintenta en el próximo clic
+      if (!ok) { cleanup(); busy = false; return; }
 
       const target = await ensureTarget();
-      if (!target) {                                   // sin icono destino: fundido de salida
-        await clone.animate([{ opacity: 1 }, { opacity: 0 }],
+      if (!target) {
+        await main.w.animate([{ opacity: 1 }, { opacity: 0 }],
           { duration: 250, easing: 'ease-out', fill: 'forwards' }).finished.catch(() => {});
         cleanup(); finished = true; return;
       }
 
       await frames(2);
-      if (SETTLE_MS) await sleep(SETTLE_MS);
+      if (CFG.settle) await sleep(CFG.settle);
 
-      // ---------- LAST ----------
-      const last = target.getBoundingClientRect();
-      if (!last.width || !last.height) { cleanup(); finished = true; return; }
+      let lastRect = target.getBoundingClientRect();
+      if (!lastRect.width || !lastRect.height) { cleanup(); finished = true; return; }
 
-      // ---------- INVERT ----------
-      // Escala uniforme (sin deformar) + recorte desde arriba para llegar a la forma del icono
-      const s = Math.max(last.width / first.width, last.height / first.height);
-      const cropX = Math.max(0, (first.width - last.width / s) / 2);
-      const cropBottom = Math.max(0, first.height - last.height / s);
-      const r = radiusPx(target, last.width, last.height) / s;
-      const dx = last.left - first.left - cropX * s;
-      const dy = last.top - first.top;
+      // ---------- LAST + INVERT + PLAY ----------
+      // Línea de tiempo: 0-12% anticipación | 12-88% vuelo | 88-100% fundido cruzado
+      const place = (wrap, clone, t, withFx) => {
+        const last = lastRect;
+        const f = clamp((t - 0.12) / 0.76);
+        const eP = easeInOut(f);                          // posición: arranque y frenado fuertes
+        const eS = easeInOutS(clamp(f * 1.12)) + 0.05 * Math.sin(Math.PI * clamp((f - 0.6) / 0.4)); // encoge con rebote
+        const eC = easeInOutS(clamp(f / 0.85));           // recorte y encogimiento van juntos
 
-      // ---------- PLAY ----------
-      const anim = clone.animate([
-        { transform: 'translate(0px, 0px) scale(1)',
-          clipPath: 'inset(0px 0px 0px 0px round 0px)' },
-        { transform: `translate(${dx}px, ${dy}px) scale(${s})`,
-          clipPath: `inset(0px ${cropX}px ${cropBottom}px ${cropX}px round ${r}px)` }
-      ], { duration: DURATION, easing: EASING, fill: 'forwards' });
+        const sFinal = last.width / S;
+        const pulse = Math.sin(Math.PI * clamp(t / 0.24));
+        const sc = Math.pow(sFinal, eS) * (1 + 0.05 * pulse);
+        const v = Math.sin(Math.PI * f);
+        const sx = sc * (1 + CFG.stretch * v), sy = sc * (1 - CFG.stretch * v);
 
-      await anim.finished.catch(() => {});
+        const L = x0 * eC, T = y0 * eC;
+        const R = (W - x0 - S) * eC, B = (H - y0 - S) * eC;
+        const rad = (radiusPx(target, last.width, last.height) / sFinal) * eC;
+        clone.style.clipPath = `inset(${T}px ${R}px ${B}px ${L}px round ${rad}px)`;
 
-      // Aterrizaje: el icono pequeño aparece y el clon se destruye
-      target.classList.remove(HIDE);
-      requestAnimationFrame(() => {
-        clone.remove();
-        avatar.style.visibility = '';
-      });
-      finished = true;
-    };
+        const cxl = L + (W - L - R) / 2, cyl = T + (H - T - B) / 2;
+        wrap.style.transformOrigin = `${cxl}px ${cyl}px`;
 
-    const onFirstInteraction = (e) => {
-      if (busy || finished) return;
-      if (!(e.target instanceof Element) || !e.target.closest(INPUT_SEL)) return;
-      if (container.classList.contains('chat-mode')) return;
-      busy = true;
-      run();
-    };
+        const p0x = first.left + W / 2, p0y = first.top + H / 2;
+        const p1x = last.left + last.width / 2, p1y = last.top + last.height / 2;
+        const dx = p1x - p0x, dy = p1y - p0y, len = Math.hypot(dx, dy) || 1;
+        let nx = -dy / len, ny = dx / len;
+        if (ny > 0) { nx = -nx; ny = -ny; }
+        const qx = (p0x + p1x) / 2 + nx * len * CFG.arc;
+        const qy = (p0y + p1y) / 2 + ny * len * CFG.arc;
+        const u = 1 - eP;
+        const px = u * u * p0x + 2 * u * eP * qx + eP * eP * p1x;
+        const py = u * u * p0y + 2 * u * eP * qy + eP * eP * p1y - 8 * pulse;   // se eleva al tomar impulso
 
-    // Captura: se ejecuta ANTES de que tu código añada chat-mode
-    document.addEventListener('pointerdown', onFirstInteraction, true);
-    document.addEventListener('focusin', onFirstInteraction, true);
-  };
+        const tilt = (dx < 0 ? -1 : 1) * CFG.tilt * v * (1 - f * 0.5);
+        wrap.style.transform =
+          `translate(${px - (first.left + cxl)}px, ${py - (first.top + cyl)}px) ` +
+          `rotate(${tilt.toFixed(2)}deg) scale(${sx}, ${sy})`;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-
-/* ==========================================================
-   FLIP: el avatar grande se encoge y vuela hasta el primer
-   .chat-avatar del chat. First -> Last -> Invert -> Play.
-   ========================================================== */
-(() => {
-  const DURATION = 600;                              
-  const EASING = 'cubic-bezier(0.65, 0, 0.35, 1)';   
-  const SETTLE_MS = 0;       
-  const WAIT_CHAT_MODE = 1000;
-  const WAIT_TARGET = 1500;
-  const HIDE = 'flip-hidden';
-  const INPUT_SEL = [
-    '#text-input', '#user-input', '#message-input', 
-    'input[type="text"]', 'textarea'
-  ].join(',');
-
-  const frames = (n) => new Promise((res) => {
-    const step = () => (--n <= 0 ? res() : requestAnimationFrame(step));
-    requestAnimationFrame(step);
-  });
-  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
-
-  const init = () => {
-    const container = document.querySelector('.app-container');
-    const avatar = document.getElementById('bot-avatar');
-    if (!container || !avatar) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    let busy = false;
-    let finished = false;
-
-    const findTarget = () => document.querySelector('.chat-avatar');
-
-    const ensureTarget = () => new Promise((res) => {
-      const grab = () => {
-        const t = findTarget();
-        if (t) t.classList.add(HIDE);
-        return t;
-      };
-      const now = grab();
-      if (now) return res(now);
-      const mo = new MutationObserver(() => {
-        const t = grab();
-        if (t) { mo.disconnect(); clearTimeout(to); res(t); }
-      });
-      mo.observe(document.body, { childList: true, subtree: true });
-      const to = setTimeout(() => { mo.disconnect(); res(null); }, WAIT_TARGET);
-    });
-
-    const whenChatMode = () => new Promise((res) => {
-      if (container.classList.contains('chat-mode')) return res(true);
-      const mo = new MutationObserver(() => {
-        if (container.classList.contains('chat-mode')) {
-          mo.disconnect(); clearTimeout(to); res(true);
+        if (withFx) {
+          wrap.style.filter = v < 0.01 ? 'none' :
+            `blur(${(1.2 * v).toFixed(2)}px) drop-shadow(0 ${(16 * v).toFixed(1)}px ${(28 * v).toFixed(1)}px rgba(0,0,0,${(0.5 * v).toFixed(2)})) ` +
+            `drop-shadow(0 0 ${(18 * v).toFixed(1)}px rgba(${CFG.accent},${(0.4 * v).toFixed(2)}))`;
         }
-      });
-      mo.observe(container, { attributes: true, attributeFilter: ['class'] });
-      const to = setTimeout(() => { mo.disconnect(); res(false); }, WAIT_CHAT_MODE);
-    });
-
-    const radiusPx = (el, w, h) => {
-      const v = getComputedStyle(el).borderTopLeftRadius || '0px';
-      const n = parseFloat(v) || 0;
-      return v.includes('%') ? (n / 100) * Math.min(w, h) : n;
-    };
-
-    const run = async () => {
-      const first = avatar.getBoundingClientRect();
-      if (!first.width || !first.height) { busy = false; return; }
-
-      const cs = getComputedStyle(avatar);
-      const clone = avatar.cloneNode(true);
-      clone.removeAttribute('id');
-      Object.assign(clone.style, {
-        position: 'fixed',
-        top: first.top + 'px',
-        left: first.left + 'px',
-        width: first.width + 'px',
-        height: first.height + 'px',
-        margin: '0',
-        maxWidth: 'none',
-        maxHeight: 'none',
-        transform: 'none',
-        transformOrigin: '0 0',
-        opacity: '1',
-        objectFit: cs.objectFit,
-        objectPosition: cs.objectPosition,
-        zIndex: '9999',
-        pointerEvents: 'none',
-        willChange: 'transform, clip-path'
-      });
-      document.body.appendChild(clone);
-      avatar.style.visibility = 'hidden';          
-
-      const cleanup = () => {
-        clone.remove();
-        avatar.style.visibility = '';
-        document.querySelectorAll('.chat-avatar.' + HIDE)
-          .forEach((el) => el.classList.remove(HIDE));
       };
 
-      const early = findTarget();
-      if (early) early.classList.add(HIDE);
+      let revealed = false;
+      const frame = (t) => {
+        const r = target.getBoundingClientRect();
+        if (r.width && r.height) lastRect = r;
 
-      const ok = await whenChatMode();
-      if (!ok) { cleanup(); busy = false; return; }   
+        place(main.w, main.c, t, true);
 
-      const target = await ensureTarget();
-      if (!target) {                                   
-        await clone.animate([{ opacity: 1 }, { opacity: 0 }],
-          { duration: 250, easing: 'ease-out', fill: 'forwards' }).finished.catch(() => {});
-        cleanup(); finished = true; return;
-      }
+        // estela: copias que siguen la trayectoria con retraso
+        ghosts.forEach((g) => {
+          const tt = Math.max(0, t - g.k * 0.045);
+          place(g.w, g.c, tt, false);
+          const fade = clamp((t - 0.14) / 0.1) * (1 - clamp((t - 0.78) / 0.12));
+          g.w.style.opacity = (fade * 0.2 / g.k).toFixed(3);
+        });
 
-      await frames(2);
-      if (SETTLE_MS) await sleep(SETTLE_MS);
+        // fundido cruzado: el icono real aparece mientras el clon se desvanece
+        if (t >= 0.9) {
+          if (!revealed) {
+            revealed = true;
+            target.classList.remove(HIDE);
+            target.animate([{ opacity: 0 }, { opacity: 1 }],
+              { duration: Math.max(60, CFG.duration * 0.1), easing: 'linear' });
+          }
+          main.w.style.opacity = String(1 - clamp((t - 0.9) / 0.1));
+        }
+      };
 
-      const last = target.getBoundingClientRect();
-      if (!last.width || !last.height) { cleanup(); finished = true; return; }
-
-      const s = Math.max(last.width / first.width, last.height / first.height);
-      const cropX = Math.max(0, (first.width - last.width / s) / 2);
-      const cropBottom = Math.max(0, first.height - last.height / s);
-      const r = radiusPx(target, last.width, last.height) / s;
-      const dx = last.left - first.left - cropX * s;
-      const dy = last.top - first.top;
-
-      const anim = clone.animate([
-        { transform: 'translate(0px, 0px) scale(1)',
-          clipPath: 'inset(0px 0px 0px 0px round 0px)' },
-        { transform: `translate(${dx}px, ${dy}px) scale(${s})`,
-          clipPath: `inset(0px ${cropX}px ${cropBottom}px ${cropX}px round ${r}px)` }
-      ], { duration: DURATION, easing: EASING, fill: 'forwards' });
-
-      await anim.finished.catch(() => {});
-
-      target.classList.remove(HIDE);
-      requestAnimationFrame(() => {
-        clone.remove();
-        avatar.style.visibility = '';
+      frame(0);
+      await new Promise((res) => {
+        const t0 = performance.now();
+        const tick = (now) => {
+          const t = clamp((now - t0) / CFG.duration);
+          frame(t);
+          t < 1 ? requestAnimationFrame(tick) : res();
+        };
+        requestAnimationFrame(tick);
       });
+
+      // ---------- Aterrizaje: rebote del icono + onda naranja independiente ----------
+      target.classList.remove(HIDE);
+      target.animate(
+        [{ transform: 'scale(0.9)' }, { transform: 'scale(1.12)', offset: 0.5 }, { transform: 'scale(1)' }],
+        { duration: 420, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }
+      );
+      const lr = target.getBoundingClientRect();
+      const ring = document.createElement('div');
+      Object.assign(ring.style, {
+        position: 'fixed', left: lr.left + 'px', top: lr.top + 'px',
+        width: lr.width + 'px', height: lr.height + 'px',
+        borderRadius: getComputedStyle(target).borderTopLeftRadius || '50%',
+        border: `2px solid rgba(${CFG.accent}, 0.8)`, boxSizing: 'border-box',
+        pointerEvents: 'none', zIndex: '9999'
+      });
+      document.body.appendChild(ring);
+      ring.animate(
+        [{ transform: 'scale(1)', opacity: 0.8 }, { transform: 'scale(2.2)', opacity: 0 }],
+        { duration: 650, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' }
+      ).finished.catch(() => {}).then(() => ring.remove());
+
+      main.w.remove();
+      ghosts.forEach((g) => g.w.remove());
+      avatar.style.visibility = '';
+      if (bubbleAnim) bubbleAnim.cancel();
       finished = true;
     };
 
@@ -446,9 +390,6 @@ sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
     document.addEventListener('focusin', onFirstInteraction, true);
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
