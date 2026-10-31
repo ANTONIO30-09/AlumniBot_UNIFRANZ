@@ -41,14 +41,18 @@
             </button>
         </div>
 
-        <!-- Barra de Grabación (Oculta por defecto) -->
+        <!-- Barra de Grabación (Diseño mejorado) -->
         <div class="input-area recording-bar hidden" id="recording-bar">
-            <button class="icon-btn" title="Adjuntar">+</button>
+            <button class="icon-btn plus-btn" title="Adjuntar">+</button>
             <canvas id="waveform" width="300" height="40"></canvas>
+            
+            <!-- Botón de Detener (Círculo blanco, cuadrado negro) -->
             <button id="stop-rec-btn" class="icon-btn stop-btn" title="Detener grabación">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect></svg>
+                <div class="stop-square"></div>
             </button>
-            <button id="send-rec-btn" class="icon-btn send-btn" title="Enviar audio">
+            
+            <!-- Botón de Enviar (Círculo morado, flecha blanca) -->
+            <button id="send-rec-btn" class="icon-btn send-voice-btn" title="Enviar audio">
                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
             </button>
         </div>
