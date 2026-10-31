@@ -27,47 +27,37 @@ body {
     flex-direction: column;
     height: 100dvh;
     position: relative;
-    background: transparent !important;
 }
 
 header { 
     flex-shrink: 0; 
     text-align: center; 
     padding: 15px; 
-    z-index: 20; /* Asegura que esté arriba */
-    background: transparent !important;
 }
 header h1 { margin: 0; font-size: 1.6rem; font-weight: 800; }
 header h1 span { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
 header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 
-/* --- ONBOARDING --- */
+/* --- SECCIÓN AVATAR (ONBOARDING) --- */
 .avatar-section {
     flex: 1; 
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    position: relative;
-    z-index: 10;
     min-height: 0;
-    background: transparent !important;
 }
 
-.avatar-container {
+.avatar-wrapper {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
     height: 100%;
-    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    background: transparent !important;
-    border: none !important;
+    width: 100%;
 }
 
-.avatar-container::before {
+.avatar-wrapper::before {
     content: '';
     position: absolute;
     width: 250px;
@@ -77,47 +67,49 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     opacity: 0.3;
     z-index: 0;
     border-radius: 50%;
-    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.8s ease;
 }
 
 .avatar-img {
     width: 100%;
-    max-width: 450px; 
-    max-height: 65vh; 
+    max-width: 400px; 
+    height: 100%;
+    max-height: 100%; /* Ocupa todo el espacio hasta el input */
     object-fit: contain;
     background: transparent !important;
     border: none !important;
-    box-shadow: none !important;
     filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
     z-index: 1;
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.comic-bubble {
+/* Globo de texto mejorado */
+.modern-bubble {
     position: absolute;
-    top: 0%;
-    left: 5%;
+    top: 10%;
+    left: 10%;
     background: var(--text-light);
     color: var(--bg-dark);
-    padding: 10px 15px;
-    border-radius: 15px;
-    font-weight: bold;
-    font-size: 0.85rem;
-    line-height: 1.2;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    padding: 12px 18px;
+    border-radius: 20px 20px 20px 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     z-index: 2;
     transition: all 0.4s ease;
-    transform-origin: bottom right;
-    max-width: 200px;
+    max-width: 220px;
 }
-.comic-bubble::after {
+.modern-bubble::after {
     content: '';
     position: absolute;
-    bottom: -8px;
-    right: 20px; 
-    border-width: 8px 0 8px 10px;
-    border-style: solid;
-    border-color: transparent transparent transparent var(--text-light);
+    bottom: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    background: var(--text-light);
+    clip-path: polygon(0 0, 100% 100%, 0 100%);
+    transform: translateY(100%);
 }
 
 /* --- SECCIÓN DEL CHAT --- */
@@ -128,14 +120,13 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     display: flex;
     flex-direction: column;
-    min-height: 0; /* CRUCIAL PARA QUE EL INPUT NO DESAPAREZCA */
-    background: transparent !important;
+    min-height: 0;
 }
 
 .chat-box {
     flex: 1;
-    min-height: 0; /* CRUCIAL */
-    padding: 20px 20px 10px 20px; /* Espacio extra arriba para que el avatar no lo tape */
+    min-height: 0;
+    padding: 10px 20px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -163,7 +154,7 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     padding: 10px 15px; 
     padding-bottom: max(15px, env(safe-area-inset-bottom)); 
     background: transparent;
-    z-index: 20;
+    z-index: 10;
 }
 .input-area { display: flex; align-items: center; background-color: var(--bot-msg); border-radius: 30px; padding: 8px 10px 8px 20px; border: 1px solid #3A3A3A; }
 #text-input { flex: 1; background: transparent; border: none; color: white; font-size: 1rem; outline: none; }
@@ -174,43 +165,47 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .btn-mic { background-color: transparent; color: var(--text-muted); }
 .hidden { display: none !important; }
 
-/* --- MODO CHAT (TRANSICIÓN Y SUPERPOSICIÓN) --- */
+/* --- TRANSICIÓN AL MODO CHAT (EL AVATAR SE VUELVE ICONO) --- */
 .app-container.chat-mode .avatar-section {
-    flex: 0 0 auto; 
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-bottom: -15px; /* Hace que el avatar se hunda en el chat */
-    z-index: 15; /* Lo pone por encima del chat */
+    flex: 0 0 80px; /* Se encoge y reserva espacio */
+    margin-bottom: 10px;
+}
+
+.app-container.chat-mode .avatar-wrapper {
+    height: 80px;
+}
+
+.app-container.chat-mode .avatar-wrapper::before {
+    width: 70px;
+    height: 70px;
+    filter: blur(25px);
+    opacity: 0.5;
 }
 
 .app-container.chat-mode .avatar-img {
-    width: 130px; /* Más grande para que llegue al chat */
-    max-width: 130px;
-    height: 130px;
-    max-height: 130px;
-    animation: breathe 4s ease-in-out infinite; 
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; /* Se vuelve círculo */
+    border: 2px solid var(--accent-color); /* Borde naranja */
+    background-color: var(--bg-black) !important; /* Fondo negro */
+    object-fit: cover; /* Llena el círculo */
+    filter: drop-shadow(0 0 10px var(--accent-glow));
+    animation: breathe 3s ease-in-out infinite;
 }
 
 @keyframes breathe {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+    50% { transform: scale(1.05); }
 }
 
-.app-container.chat-mode .avatar-container::before {
-    width: 120px;
-    height: 120px;
-    filter: blur(40px);
-}
-
-.app-container.chat-mode .comic-bubble {
+.app-container.chat-mode .modern-bubble {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.5);
     pointer-events: none;
 }
 
 .app-container.chat-mode .chat-section {
-    flex: 1; 
+    flex: 1; /* Ocupa el resto de la pantalla */
     opacity: 1;
     overflow: visible;
-    z-index: 10; /* Debajo del avatar, arriba del fondo */
 }
