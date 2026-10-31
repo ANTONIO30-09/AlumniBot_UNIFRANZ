@@ -2,10 +2,50 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlumniBot UNIFRANZ</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>AlumniBot UNIFRANZ</h1>
-    <p>El frontend se construirá pronto. El backend ya está funcionando.</p>
+    <div class="chat-container">
+        <header>
+            <h1>AlumniBot <span>UNIFRANZ</span></h1>
+            <p>Feria de Empleabilidad</p>
+        </header>
+
+        <div class="avatar-container">
+            <!-- Avatar SVG con boca animada -->
+            <svg viewBox="0 0 200 200" class="avatar" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="90" fill="#1e293b" stroke="#38bdf8" stroke-width="4"/>
+                <!-- Pelo -->
+                <path d="M 40 80 Q 40 20 100 20 Q 160 20 160 80 Q 150 50 100 50 Q 50 50 40 80 Z" fill="#f97316"/>
+                <!-- Ojos -->
+                <circle cx="70" cy="90" r="10" fill="#fff"/>
+                <circle cx="130" cy="90" r="10" fill="#fff"/>
+                <circle cx="70" cy="90" r="4" fill="#000"/>
+                <circle cx="130" cy="90" r="4" fill="#000"/>
+                <!-- Boca (Se animará con JS) -->
+                <path id="mouth" d="M 70 130 Q 100 130 130 130" stroke="#f87171" stroke-width="6" stroke-linecap="round" fill="transparent"/>
+            </svg>
+            <div id="status" class="status">Presiona el micrófono para hablar</div>
+        </div>
+
+        <div id="chat-box" class="chat-box">
+            <div class="message bot-message">
+                ¡Hola! Soy AlumniBot. ¿En qué puedo ayudarte hoy sobre la Red Alumni o la Feria de Empleabilidad?
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="text-input" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+            <button id="send-btn" class="btn-send">Enviar</button>
+            <button id="mic-btn" class="btn-mic">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </button>
+        </div>
+    </div>
+    <script src="/js/avatar.js"></script>
+    <script src="/js/speech.js"></script>
+    <script src="/js/app.js"></script>
 </body>
 </html>
