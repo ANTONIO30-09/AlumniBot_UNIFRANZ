@@ -4,7 +4,6 @@ const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
 const statusDiv = document.getElementById('status');
 
-// Función para agregar mensajes al chat
 function addMessage(text, sender) {
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
@@ -13,10 +12,8 @@ function addMessage(text, sender) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Función principal para enviar mensaje al backend
 async function sendMessage(message) {
     if (!message.trim()) return;
-    
     addMessage(message, 'user');
     textInput.value = '';
     statusDiv.textContent = "Pensando...";
@@ -27,37 +24,32 @@ async function sendMessage(message) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message })
         });
-
         const data = await response.json();
-        
         if (data.response) {
             addMessage(data.response, 'bot');
-            window.speechAPI.speak(data.response); // Hacer que el bot hable
+            window.speechAPI.speak(data.response);
             statusDiv.textContent = "Presiona el micrófono para hablar";
         } else {
-            addMessage(data.error || "Error al procesar la respuesta.", 'bot');
+            addMessage(data.error || "Error al procesar.", 'bot');
             statusDiv.textContent = "Error";
         }
     } catch (error) {
-        addMessage("Error de conexión con el servidor.", 'bot');
+        addMessage("Error de conexión.", 'bot');
         statusDiv.textContent = "Error de red";
     }
 }
 
-// Eventos de botones
 sendBtn.addEventListener('click', () => sendMessage(textInput.value));
 textInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage(textInput.value);
 });
 
-// Evento del micrófono
 if (window.speechAPI.recognition) {
     micBtn.addEventListener('click', () => {
         if (micBtn.classList.contains('listening')) {
             window.speechAPI.recognition.stop();
             return;
         }
-
         try {
             window.speechAPI.recognition.start();
             micBtn.classList.add('listening');
@@ -79,10 +71,11 @@ if (window.speechAPI.recognition) {
         }
     };
 
+    // MOSTRAR EL ERROR REAL
     window.speechAPI.recognition.onerror = (event) => {
         console.error("Error de reconocimiento:", event.error);
         micBtn.classList.remove('listening');
-        statusDiv.textContent = "Error al escuchar. Intenta de nuevo.";
+        statusDiv.textContent = `Error: ${event.error}. Revisa tu micrófono.`;
     };
 } else {
     micBtn.style.display = 'none';
