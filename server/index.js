@@ -15,8 +15,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Rutas de la API
 app.use('/api/chat', chatRoute);
 
-// Ruta comodín para el frontend
-app.get('*', (req, res) => {
+// Ruta comodín CORREGIDA para Express 5
+app.get('/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
