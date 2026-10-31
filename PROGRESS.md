@@ -1,16 +1,20 @@
 # PROGRESS - AlumniBot_UNIFRANZ
 
 ## Estado Actual
-- Fase: Documentación y Setup
-- Completado:
-  - Repositorio público y ramas dev/main configuradas.
-  - README.md profesionalizado y libre de errores de formato.
-- Pendiente:
-  - Crear carpetas server/ y knowledge/.
-  - Generar chunks.json y programar backend.
+- **Fase:** Día 3 - Finalización y Despliegue.
+- **Completado:**
+  - Repositorio y configuración Git.
+  - Backend (Express, Groq, MiniSearch RAG, Rate Limiting).
+  - Frontend (Diseño responsivo, Avatar animado, UI de grabación).
+  - Integración de transcripción de voz con Groq Whisper.
+  - Archivo de configuración `render.yaml` para despliegue.
+- **Pendiente:**
+  - Desplegar en Render y configurar la API Key en el panel web.
+  - Actualizar README con el enlace final.
 
 ## Decisiones Técnicas
-- Node.js + Express (Backend)
-- Groq API (LLM rápido)
-- MiniSearch (RAG local)
-- SVG + Web Speech API (Avatar y Voz)
+- **Node.js + Express:** Backend ligero.
+- **Groq:** LLM (openai/gpt-oss-120b) y STT (whisper-large-v3-turbo).
+- **MiniSearch:** Búsqueda local en JSON.
+- **Web Audio API:** Grabación y visualización de ondas.
+- **Diseño Mobile-First:** Interfaz adaptada para la feria.
