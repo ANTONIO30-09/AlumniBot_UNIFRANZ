@@ -15,55 +15,54 @@ function startChatExperience() {
     if (!chatStarted) {
         chatStarted = true;
         
-        const largeAvatar = document.getElementById('bot-avatar');
+        const originalAvatar = document.getElementById('bot-avatar');
+        const originalRect = originalAvatar.getBoundingClientRect();
         const bubble = document.getElementById('modern-bubble');
-        const avatarSection = document.getElementById('avatar-section');
-        
-        // 1. Ocultar el globo inmediatamente
+
+        // 1. Ocultar el globo original
         bubble.style.opacity = 0;
         
-        // 2. Insertar el mensaje del bot, pero con el avatar pequeño invisible
+        // 2. Crear el clon volador
+        const clone = originalAvatar.cloneNode();
+        clone.style.position = 'fixed';
+        clone.style.top = `${originalRect.top}px`;
+        clone.style.left = `${originalRect.left}px`;
+        clone.style.width = `${originalRect.width}px`;
+        clone.style.height = `${originalRect.height}px`;
+        clone.style.margin = '0';
+        clone.style.zIndex = '9999';
+        clone.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        clone.style.transformOrigin = 'top left';
+        clone.style.pointerEvents = 'none';
+        document.body.appendChild(clone);
+
+        // 3. Cambiar layout e insertar mensaje (con el icono pequeño oculto)
+        appContainer.classList.add('chat-mode');
         addMessage("¡Hola! Soy AlumniBot. Puedes preguntarme sobre <b>vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni</b>. ¿En qué te ayudo?", 'bot', true);
         
-        // 3. Calcular posiciones exactas (FLIP)
-        const firstRect = largeAvatar.getBoundingClientRect();
+        // 4. Obtener destino y animar
         const targetAvatar = document.querySelector('.chat-avatar');
-        const lastRect = targetAvatar.getBoundingClientRect();
-        
-        // Calcular diferencias
-        const deltaX = lastRect.left - firstRect.left;
-        const deltaY = lastRect.top - firstRect.top;
-        const scale = lastRect.width / firstRect.width;
-        
-        // 4. Preparar el avatar grande para volar
-        largeAvatar.style.position = 'fixed';
-        largeAvatar.style.top = `${firstRect.top}px`;
-        largeAvatar.style.left = `${firstRect.left}px`;
-        largeAvatar.style.width = `${firstRect.width}px`;
-        largeAvatar.style.height = `${firstRect.height}px`;
-        largeAvatar.style.margin = 0;
-        largeAvatar.style.transformOrigin = 'top left';
-        largeAvatar.style.zIndex = '9999';
-        
-        // Ocultar la sección original para liberar espacio
-        avatarSection.style.display = 'none';
-        
-        // Forzar al navegador a reconocer el estado inicial
-        void largeAvatar.offsetWidth;
-        
-        // 5. Aplicar la transición y el vuelo
-        largeAvatar.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.2s ease-in 0.4s, border 0.1s ease-in 0.5s, background-color 0.2s ease-in 0.4s';
-        largeAvatar.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scale})`;
-        largeAvatar.style.borderRadius = '50%';
-        largeAvatar.style.border = '2px solid var(--accent-color)';
-        largeAvatar.style.backgroundColor = 'var(--bg-black)';
-        largeAvatar.style.objectFit = 'cover';
-        largeAvatar.style.objectPosition = 'center 15%';
-        
-        // 6. Cuando termina el vuelo
+        const targetRect = targetAvatar.getBoundingClientRect();
+
+        // Forzar al navegador a calcular el layout antes de animar
+        void clone.offsetWidth;
+
+        requestAnimationFrame(() => {
+            clone.style.top = `${targetRect.top}px`;
+            clone.style.left = `${targetRect.left}px`;
+            clone.style.width = `${targetRect.width}px`;
+            clone.style.height = `${targetRect.height}px`;
+            clone.style.borderRadius = '50%';
+            clone.style.border = '2px solid var(--accent-color)';
+            clone.style.objectFit = 'cover';
+            clone.style.objectPosition = 'center 15%';
+            clone.style.backgroundColor = 'var(--bg-black)';
+        });
+
+        // 5. Al terminar el vuelo
         setTimeout(() => {
-            largeAvatar.style.display = 'none'; // Ocultar el volador
-            targetAvatar.style.opacity = 1;     // Mostrar el real
+            clone.remove();
+            targetAvatar.style.opacity = '1';
             window.speechAPI.speak("¡Hola! Soy AlumniBot. Puedes preguntarme sobre vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni. ¿En qué te ayudo?");
         }, 600); 
     }
