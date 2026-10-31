@@ -191,3 +191,20 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .stop-btn { width: 36px; height: 36px; border-radius: 50%; background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
 .stop-square { width: 12px; height: 12px; background-color: #000000; border-radius: 2px; }
 .send-voice-btn { width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: white; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+
+/* ==========================================================
+   FLIP avatar: el .chat-avatar objetivo nace invisible
+   (la clase la pone/quita app.js solo durante el vuelo)
+   ========================================================== */
+.chat-avatar.flip-hidden {
+  opacity: 0 !important;
+  transition: none !important;
+}
+
+/* ==========================================================
+   FLIP avatar: el .chat-avatar objetivo nace invisible
+   ========================================================== */
+.chat-avatar.flip-hidden {
+  opacity: 0 !important;
+  transition: none !important;
+}
