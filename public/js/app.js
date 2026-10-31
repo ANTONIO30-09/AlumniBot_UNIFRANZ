@@ -3,9 +3,7 @@ const chatBox = document.getElementById('chat-box');
 const textInput = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
-const statusDiv = document.getElementById('status');
 
-// Elementos de la barra de grabación
 const normalInputArea = document.getElementById('normal-input-area');
 const recordingBar = document.getElementById('recording-bar');
 const stopRecBtn = document.getElementById('stop-rec-btn');
@@ -14,37 +12,36 @@ const sendRecBtn = document.getElementById('send-rec-btn');
 let isRecording = false;
 let chatStarted = false;
 
-// INICIALIZAR EXPERIENCIA
 function startChatExperience() {
     if (!chatStarted) {
         appContainer.classList.add('chat-mode');
         chatStarted = true;
         
-        // Saludo inicial del bot en el chat
+        // Esperamos que la animación de encogimiento termine (0.8s) para inyectar el mensaje
         setTimeout(() => {
-            addMessage("¡Hola! Soy AlumniBot. ¿En qué puedo ayudarte hoy sobre la Red Alumni o la Feria de Empleabilidad?", 'bot');
-        }, 500); // Pequeño delay para que la animación fluya
+            addMessage("¡Hola! Soy AlumniBot. Puedes preguntarme sobre <b>vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni</b>. ¿En qué te ayudo?", 'bot');
+            // Hacemos que el bot hable el mensaje de bienvenida
+            window.speechAPI.speak("¡Hola! Soy AlumniBot. Puedes preguntarme sobre vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni. ¿En qué te ayudo?");
+        }, 800); 
     }
 }
 
-// Eventos para disparar la animación
 textInput.addEventListener('focus', startChatExperience);
 micBtn.addEventListener('click', startChatExperience);
 
 function addMessage(text, sender) {
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-    msgDiv.textContent = text;
+    msgDiv.innerHTML = text; // Usamos innerHTML por si hay etiquetas <b>
     chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 async function sendMessage(message) {
     if (!message.trim()) return;
-    startChatExperience(); // Asegurar que estamos en modo chat
+    startChatExperience(); 
     addMessage(message, 'user');
     textInput.value = '';
-    statusDiv.style.opacity = "0"; // Ocultar status de bienvenida
 
     try {
         const response = await fetch('/api/chat', {
@@ -64,21 +61,18 @@ async function sendMessage(message) {
     }
 }
 
-// Eventos de Texto
 sendBtn.addEventListener('click', () => sendMessage(textInput.value));
 textInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage(textInput.value);
 });
 
-// Lógica de Grabación
 async function startRecordingUI() {
-    startChatExperience(); // Asegurar modo chat
+    startChatExperience();
     const success = await window.speechAPI.startRecording();
     if (success) {
         isRecording = true;
         normalInputArea.classList.add('hidden');
         recordingBar.classList.remove('hidden');
-        statusDiv.style.opacity = "0";
     }
 }
 

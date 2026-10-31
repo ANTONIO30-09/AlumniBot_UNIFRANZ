@@ -13,25 +13,23 @@
             <p>Feria de Empleabilidad</p>
         </header>
 
-        <!-- SECCIÓN DEL AVATAR (Cambia de tamaño) -->
+        <!-- SECCIÓN DEL AVATAR (Ocupa todo el espacio al inicio) -->
         <div class="avatar-section" id="avatar-section">
             <div class="avatar-container">
+                <!-- Globo de texto junto a la cabeza -->
+                <div class="comic-bubble" id="comic-bubble">
+                    ¡Hola! Soy AlumniBot.<br>¿En qué puedo ayudarte hoy?
+                </div>
                 <img src="/assets/avatar.png" alt="AlumniBot" class="avatar-img" id="bot-avatar">
             </div>
-            <div class="greeting-text" id="greeting-text">
-                ¡Hola! Soy AlumniBot. <br> ¿En qué puedo ayudarte hoy?
-            </div>
-            <div id="status" class="status">Presiona el micrófono o escribe para comenzar</div>
         </div>
 
-        <!-- SECCIÓN DEL CHAT (Oculta inicialmente) -->
+        <!-- SECCIÓN DEL CHAT -->
         <div class="chat-section" id="chat-section">
-            <div id="chat-box" class="chat-box">
-                <!-- Los mensajes se inyectan aquí -->
-            </div>
+            <div id="chat-box" class="chat-box"></div>
         </div>
 
-        <!-- SECCIÓN DE ENTRADA (Siempre visible) -->
+        <!-- SECCIÓN DE ENTRADA -->
         <div class="input-wrapper" id="input-wrapper">
             <div class="input-area" id="normal-input-area">
                 <input type="text" id="text-input" placeholder="Escribe o dicta tu mensaje..." autocomplete="off">
