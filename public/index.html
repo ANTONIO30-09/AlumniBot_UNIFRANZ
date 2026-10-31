@@ -13,25 +13,25 @@
             <p>Feria de Empleabilidad</p>
         </header>
 
-        <!-- Contenedor del Avatar -->
         <div class="avatar-section" id="avatar-section">
             <div class="avatar-wrapper">
-                <!-- Globo de texto a la izquierda -->
+                <!-- NUEVO GLOBO SVG CON FORMA DE CÓMIC -->
                 <div class="modern-bubble" id="modern-bubble">
-                    ¡Hola! Soy AlumniBot.<br>¿En qué puedo ayudarte?
+                    <svg class="bubble-svg" viewBox="0 0 200 100" preserveAspectRatio="none">
+                        <path d="M 15 5 L 165 5 Q 180 5 180 20 L 180 60 Q 180 75 165 75 L 150 75 L 180 100 L 130 75 L 15 75 Q 0 75 0 60 L 0 20 Q 0 5 15 5 Z" 
+                              fill="#2A2A2A" stroke="#EC5E17" stroke-width="4" stroke-linejoin="round" />
+                    </svg>
+                    <span class="bubble-text">¡Hola! Soy AlumniBot.<br>¿En qué puedo ayudarte?</span>
                 </div>
                 <img src="/assets/avatar.png" alt="AlumniBot" class="avatar-img" id="bot-avatar">
             </div>
         </div>
 
-        <!-- Contenedor del Chat -->
         <div class="chat-section" id="chat-section">
             <div id="chat-box" class="chat-box"></div>
         </div>
 
-        <!-- Input Fijo -->
         <div class="input-wrapper" id="input-wrapper">
-            <!-- Barra de texto normal -->
             <div class="input-area" id="normal-input-area">
                 <input type="text" id="text-input" placeholder="Escribe o dicta tu mensaje..." autocomplete="off">
                 <button id="send-btn" class="btn-send" title="Enviar mensaje">
@@ -42,7 +42,6 @@
                 </button>
             </div>
 
-            <!-- Barra de Grabación (Oculta) -->
             <div class="input-area recording-bar hidden" id="recording-bar">
                 <button class="icon-btn plus-btn" title="Adjuntar">+</button>
                 <canvas id="waveform" width="300" height="40"></canvas>
