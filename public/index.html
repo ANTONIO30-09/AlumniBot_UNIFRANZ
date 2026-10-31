@@ -7,35 +7,34 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="chat-container">
+    <div class="app-container" id="app-container">
         <header>
             <h1>AlumniBot <span>UNIFRANZ</span></h1>
             <p>Feria de Empleabilidad</p>
         </header>
 
-        <div class="avatar-container">
-            <!-- Globo de diálogo flotante -->
-            <div class="speech-bubble">
-                ¿Necesitas ayuda?
-                <div class="dots">
-                    <span></span><span></span><span></span>
-                </div>
+        <!-- SECCIÓN DEL AVATAR (Cambia de tamaño) -->
+        <div class="avatar-section" id="avatar-section">
+            <div class="avatar-container">
+                <img src="/assets/avatar.png" alt="AlumniBot" class="avatar-img" id="bot-avatar">
             </div>
-            <!-- Avatar con efecto 3D -->
-            <img src="/assets/avatar.png" alt="AlumniBot" class="avatar-img" id="bot-avatar">
-            <div id="status" class="status">Presiona el micrófono para hablar</div>
+            <div class="greeting-text" id="greeting-text">
+                ¡Hola! Soy AlumniBot. <br> ¿En qué puedo ayudarte hoy?
+            </div>
+            <div id="status" class="status">Presiona el micrófono o escribe para comenzar</div>
         </div>
 
-        <div id="chat-box" class="chat-box">
-            <div class="message bot-message">
-                ¡Hola! Soy AlumniBot. ¿En qué puedo ayudarte hoy sobre la Red Alumni o la Feria de Empleabilidad?
+        <!-- SECCIÓN DEL CHAT (Oculta inicialmente) -->
+        <div class="chat-section" id="chat-section">
+            <div id="chat-box" class="chat-box">
+                <!-- Los mensajes se inyectan aquí -->
             </div>
         </div>
 
-        <!-- Área de entrada estilo Píldora -->
-        <div class="input-wrapper">
+        <!-- SECCIÓN DE ENTRADA (Siempre visible) -->
+        <div class="input-wrapper" id="input-wrapper">
             <div class="input-area" id="normal-input-area">
-                <input type="text" id="text-input" placeholder="Escribe tu mensaje..." autocomplete="off">
+                <input type="text" id="text-input" placeholder="Escribe o dicta tu mensaje..." autocomplete="off">
                 <button id="send-btn" class="btn-send" title="Enviar mensaje">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                 </button>
@@ -44,7 +43,6 @@
                 </button>
             </div>
 
-            <!-- Barra de Grabación -->
             <div class="input-area recording-bar hidden" id="recording-bar">
                 <button class="icon-btn plus-btn" title="Adjuntar">+</button>
                 <canvas id="waveform" width="300" height="40"></canvas>
