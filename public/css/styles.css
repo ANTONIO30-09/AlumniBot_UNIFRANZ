@@ -88,7 +88,6 @@ header p { margin: 5px 0 0; font-size: 0.9rem; color: #94a3b8; }
     border-bottom-right-radius: 0;
 }
 
-/* Estilos generales de entrada */
 .input-area {
     display: flex;
     padding: 15px;
@@ -99,7 +98,6 @@ header p { margin: 5px 0 0; font-size: 0.9rem; color: #94a3b8; }
 
 .hidden { display: none !important; }
 
-/* Modo Texto */
 #text-input {
     flex: 1;
     padding: 12px;
@@ -136,9 +134,9 @@ button {
     justify-content: center;
 }
 
-/* --- NUEVO DISEÑO DE GRABACIÓN --- */
+/* --- DISEÑO DE GRABACIÓN --- */
 .recording-bar {
-    background-color: #1c1c1e; /* Fondo gris oscuro elegante */
+    background-color: #1c1c1e;
     border-radius: 30px;
     padding: 8px 15px;
     display: flex;
@@ -160,11 +158,11 @@ button {
 
 #waveform {
     flex: 1;
+    width: 100%;
     height: 30px;
     background: transparent;
 }
 
-/* Botón de Detener */
 .stop-btn {
     width: 36px;
     height: 36px;
@@ -183,12 +181,11 @@ button {
     border-radius: 2px;
 }
 
-/* Botón de Enviar Audio */
 .send-voice-btn {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: #6b21a8; /* Morado idéntico a la referencia */
+    background-color: #6b21a8;
     color: white;
     display: flex;
     align-items: center;
