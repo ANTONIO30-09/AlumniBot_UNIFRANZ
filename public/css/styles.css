@@ -44,10 +44,10 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end; /* Pegado al fondo */
+    justify-content: flex-end; 
     padding: 0;
     margin: 0;
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     min-height: 0;
     position: relative;
 }
@@ -78,23 +78,22 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     width: 100%;
     max-width: 450px; 
     height: 100%;
-    max-height: 100%; /* Ocupa todo el alto disponible */
+    max-height: 100%; 
     object-fit: contain;
-    object-position: bottom; /* Lo pega al fondo */
+    object-position: bottom; 
     background: transparent !important;
     border: none !important;
     filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
     z-index: 1;
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-    margin-bottom: -10px; /* Truco para que se pegue al input */
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    margin-bottom: -10px; 
 }
 
-/* Globo de texto subido al tope */
+/* --- BURBUJA ESTILO CÓMIC (Saliendo de la boca) --- */
 .modern-bubble {
     position: absolute;
-    top: 2%; /* Arriba, sin tapar la cara */
-    left: 50%;
-    transform: translateX(-50%);
+    top: 25%; /* Al nivel de la boca */
+    right: 5%; /* A la derecha de la cara */
     background: var(--text-light);
     color: var(--bg-dark);
     padding: 12px 20px;
@@ -105,17 +104,17 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     z-index: 5;
     transition: all 0.4s ease;
-    white-space: nowrap;
+    max-width: 180px;
 }
+/* Pico de la burbuja apuntando a la izquierda (a la boca) */
 .modern-bubble::after {
     content: '';
     position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 10px 10px 0;
+    top: 20px;
+    left: -10px;
+    border-width: 10px 10px 10px 0;
     border-style: solid;
-    border-color: var(--text-light) transparent transparent transparent;
+    border-color: transparent var(--text-light) transparent transparent;
 }
 
 /* --- SECCIÓN DEL CHAT --- */
@@ -123,7 +122,7 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     flex: 0 0 0; 
     opacity: 0;
     overflow: hidden;
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -152,13 +151,12 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .message-row.user-row { justify-content: flex-end; }
 .message-row.bot-row { justify-content: flex-start; }
 
-/* --- ICONO DEL CHAT (ZOOM A LA CARA) --- */
 .chat-avatar {
     width: 38px;
     height: 38px;
     border-radius: 50%;
     object-fit: cover;
-    object-position: center 15%; /* Hace zoom a la cara para que no se vea pixeleado */
+    object-position: center 15%; 
     border: 2px solid var(--accent-color);
     background-color: var(--bg-black);
     flex-shrink: 0;
@@ -194,12 +192,12 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .btn-mic { background-color: transparent; color: var(--text-muted); }
 .hidden { display: none !important; }
 
-/* --- TRANSICIÓN AL MODO CHAT --- */
-.app-container.chat-mode .avatar-section {
-    flex: 0; 
+/* --- TRANSICIÓN DE VUELO (AVATAR SE VA AL ICONO) --- */
+.app-container.chat-mode .avatar-wrapper {
+    /* Mueve el avatar a la esquina superior izquierda y lo encoge al tamaño del icono (38px) */
+    transform: translate(-40vw, -35vh) scale(0.1);
     opacity: 0;
     pointer-events: none;
-    overflow: hidden;
 }
 
 .app-container.chat-mode .chat-section {
