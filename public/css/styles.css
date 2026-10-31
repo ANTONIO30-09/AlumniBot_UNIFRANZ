@@ -308,3 +308,27 @@ button {
         padding: 10px;
     }
 }
+
+/* --- FIX PARA TECLADO Y SCROLL EN MÓVILES --- */
+@media (max-width: 600px) {
+    body {
+        height: 100dvh; /* Dynamic Viewport Height: se adapta al teclado */
+        overflow: hidden; /* Evita que toda la página haga scroll */
+    }
+
+    .chat-container {
+        height: 100dvh; /* Ocupa exactamente el espacio visible */
+        max-height: 100dvh;
+    }
+
+    /* TRUCO DE FLEXBOX: Permite que el chat interno haga scroll sin empujar la caja de texto */
+    .chat-box {
+        min-height: 0; 
+        overflow-y: auto;
+    }
+
+    /* Ajuste para el notch de los iPhone o bordes inferiores */
+    .input-area {
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+}
