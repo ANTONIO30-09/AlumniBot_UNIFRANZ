@@ -1,0 +1,68 @@
+[
+  {
+    "id": "alumni_1",
+    "tema": "Red Alumni",
+    "titulo": "¿Qué es la Red Alumni UNIFRANZ?",
+    "texto": "La Red Alumni UNIFRANZ es el espacio institucional de vinculación, acompañamiento y relacionamiento con las personas que culminaron su formación universitaria. Su propósito es mantener vivo el vínculo entre la Universidad y sus graduados, promover su desarrollo profesional y personal, y convertir esa relación en una comunidad activa."
+  },
+  {
+    "id": "alumni_2",
+    "tema": "Empleabilidad",
+    "titulo": "Transición al mundo laboral",
+    "texto": "La empleabilidad es una línea central: la Universidad no se limita a formar profesionales, sino que impulsa acciones para que puedan comunicar sus competencias, prepararse para procesos de selección y acceder a oportunidades. Incluye orientación de CV, simulaciones de entrevista, vacantes difundidas y ferias de empleabilidad."
+  },
+  {
+    "id": "vacantes_1",
+    "tema": "Vacantes",
+    "titulo": "Gestión y difusión de vacantes",
+    "texto": "La Coordinación recibe oportunidades de empresas y las socializa con estudiantes y graduados. Una publicación de vacante suele incluir: nombre de la organización, cargo, funciones, requisitos, formación, ubicación, modalidad, jornada, fecha límite y mecanismo de postulación. Es importante que el bot informe que las vacantes cambian constantemente. Debe mostrar únicamente convocatorias vigentes y verificadas o dirigir al canal oficial."
+  },
+  {
+    "id": "practicas_1",
+    "tema": "Prácticas",
+    "titulo": "Prácticas preprofesionales y pasantías",
+    "texto": "La Red y el área de Empleabilidad facilitan el acercamiento entre organizaciones que requieren talento y estudiantes que buscan experiencias. Las condiciones concretas (duración, horario, tutoría, seguro, estipendio, documentación) dependen del tipo de práctica, la normativa y los acuerdos formalizados. El bot debe evitar prometer plazas, remuneraciones o aprobación automática y derivar a la Coordinación para trámites específicos."
+  },
+  {
+    "id": "coaching_1",
+    "tema": "Career Coaching",
+    "titulo": "Orientación para la empleabilidad",
+    "texto": "Career Coaching es un servicio de orientación que ayuda a estudiantes y graduados a prepararse mejor para buscar empleo. Incluye revisión y orientación para mejorar el currículum vitae, recomendaciones para adaptar el CV, optimización del perfil en LinkedIn, preparación para entrevistas laborales, simulaciones de entrevista y retroalimentación sobre comunicación. El servicio no garantiza empleo ni reemplaza la responsabilidad del postulante."
+  },
+  {
+    "id": "ferias_1",
+    "tema": "Ferias",
+    "titulo": "Ferias de empleabilidad y ruedas de talento",
+    "texto": "Las ferias de empleabilidad son espacios de encuentro entre empresas, estudiantes y graduados. Incluyen stands empresariales, socialización de vacantes, ruedas de entrevistas, recepción de currículums, presentaciones sobre procesos de selección, networking y exposición de proyectos. La experiencia Next Gen Talent reunió a 27 empresas y 107 estudiantes, generando procesos de interés y vinculación laboral."
+  },
+  {
+    "id": "networking_1",
+    "tema": "Networking",
+    "titulo": "Encuentros y bienvenida Alumni",
+    "texto": "La Red promueve encuentros que facilitan la integración de nuevos graduados y el relacionamiento entre profesionales. Estas actividades incluyen charlas, conversatorios, testimonios, dinámicas de reflexión (como el 'pasaporte profesional') y espacios de intercambio. Su valor radica en que permiten construir redes de contacto, compartir aprendizajes y reconocer que forman parte de una comunidad profesional vinculada a UNIFRANZ."
+  },
+  {
+    "id": "beneficios_1",
+    "tema": "Beneficios",
+    "titulo": "Beneficios, alianzas y convenios",
+    "texto": "La Red articula beneficios y acuerdos con empresas e instituciones para ofrecer condiciones preferenciales a la comunidad Alumni (formación continua, servicios, descuentos). Su disponibilidad y vigencia dependen de cada acuerdo. El bot debe consultar o mostrar únicamente beneficios confirmados y vigentes, explicando cómo acceder a ellos y si se requiere credencial Alumni."
+  },
+  {
+    "id": "emprendimientos_1",
+    "tema": "Emprendimientos",
+    "titulo": "Visibilización de emprendimientos Alumni",
+    "texto": "La iniciativa 'RAU en Acción: Emprendimientos que inspiran' busca dar visibilidad a proyectos y negocios impulsados por graduados. Mediante publicaciones institucionales se presentan emprendimientos, sus propuestas de valor y canales de contacto, favoreciendo la conexión entre profesionales, potenciales clientes y aliados."
+  },
+  {
+    "id": "faq_1",
+    "tema": "FAQ",
+    "titulo": "¿Puedo encontrar trabajo por medio de la Red?",
+    "texto": "La Red difunde oportunidades laborales y facilita el contacto con empresas. Sin embargo, la selección y contratación dependen de cada empleador, por lo que postular no garantiza obtener el puesto."
+  },
+  {
+    "id": "faq_2",
+    "tema": "FAQ",
+    "titulo": "¿Cómo consigo una pasantía o práctica?",
+    "texto": "Puedes consultar las oportunidades que se difundan y los requisitos de tu carrera. Algunas experiencias requieren coordinación o convenio con la organización. El equipo de Empleabilidad y tu dirección de carrera podrán orientarte sobre el procedimiento vigente."
+  }
+]

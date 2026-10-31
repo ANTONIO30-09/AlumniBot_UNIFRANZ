@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniBot UNIFRANZ</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="app-container" id="app-container">
+        <header>
+            <h1>AlumniBot <span>UNIFRANZ</span></h1>
+            <p>Feria de Empleabilidad</p>
+        </header>
+
+        <div class="avatar-section" id="avatar-section">
+            <div class="avatar-wrapper">
+                <!-- Globo de texto normal (el CSS de Claude hace la magia) -->
+                <div class="modern-bubble">
+                    ¡Hola! Soy AlumniBot.<br>¿En qué puedo ayudarte?
+                </div>
+                <img src="/assets/avatar.png" alt="AlumniBot" class="avatar-img" id="bot-avatar">
+            </div>
+        </div>
+
+        <div class="chat-section" id="chat-section">
+            <div id="chat-box" class="chat-box"></div>
+        </div>
+
+        <div class="input-wrapper" id="input-wrapper">
+            <div class="input-area" id="normal-input-area">
+                <input type="text" id="text-input" placeholder="Escribe o dicta tu mensaje..." autocomplete="off">
+                <button id="send-btn" class="btn-send" title="Enviar mensaje">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                </button>
+                <button id="mic-btn" class="btn-mic" title="Iniciar dictado">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                </button>
+            </div>
+
+            <div class="input-area recording-bar hidden" id="recording-bar">
+                <button class="icon-btn plus-btn" title="Adjuntar">+</button>
+                <canvas id="waveform" width="300" height="40"></canvas>
+                <button id="stop-rec-btn" class="icon-btn stop-btn" title="Detener y editar">
+                    <div class="stop-square"></div>
+                </button>
+                <button id="send-rec-btn" class="icon-btn send-voice-btn" title="Enviar audio">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="/js/avatar.js"></script>
+    <script src="/js/speech.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
