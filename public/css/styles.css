@@ -1,18 +1,19 @@
 :root {
-    --bg-color: #FFFFFF;         /* Blanco Limpio (Interfaz) */
-    --panel-color: #FFFFFF;      /* Fondo general del chat */
-    --accent-color: #EC5E17;     /* Naranja Unifranz (Botones) */
-    --text-color: #1C1C1C;       /* Gris Oscuro Institucional (Texto) */
-    --bot-msg: #F4F5F7;          /* Gris Claro de Soporte (Burbuja bot) */
-    --user-msg: #EC5E17;         /* Naranja Unifranz (Burbuja usuario) */
-    --teal-color: #12636B;       /* Azul/Teal Secundario (Links/Éxito) */
-    --border-color: #E0E0E0;
+    --bg-dark: #1C1C1C;          /* Gris Oscuro Institucional */
+    --bg-black: #0a0a0a;         /* Negro profundo para el gradiente */
+    --accent-color: #EC5E17;     /* Naranja Unifranz */
+    --accent-glow: rgba(236, 94, 23, 0.5); /* Resplandor naranja */
+    --text-light: #FFFFFF;
+    --text-muted: #A0A0A0;
+    --bot-msg: #2A2A2A;          /* Gris oscuro para burbuja del bot */
+    --user-msg: #EC5E17;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #F0F2F5; /* Un gris muy sutil para que resalte el chat blanco */
-    color: var(--text-color);
+    /* Fondo radial oscuro con destello naranja */
+    background: radial-gradient(circle at top center, var(--bg-dark) 0%, var(--bg-black) 100%);
+    color: var(--text-light);
     margin: 0;
     display: flex;
     justify-content: center;
@@ -23,47 +24,99 @@ body {
 .chat-container {
     width: 100%;
     max-width: 500px;
-    background-color: var(--panel-color);
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Sombra más suave */
-    overflow: hidden;
+    background: transparent; /* Ya no es una caja blanca, es la pantalla completa */
     display: flex;
     flex-direction: column;
-    height: 90vh;
+    height: 100vh;
+    position: relative;
 }
 
 header {
     text-align: center;
-    padding: 15px;
-    /* Fondo de la barra de encabezado en Gris Oscuro */
-    background: #1C1C1C; 
-    color: #FFFFFF;
-    border-bottom: 3px solid var(--accent-color);
+    padding: 20px;
+    background: transparent;
 }
 
-header h1 { margin: 0; font-size: 1.5rem; }
-header h1 span { color: var(--accent-color); }
-header p { margin: 5px 0 0; font-size: 0.9rem; color: #B0B0B0; }
+header h1 { margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: 1px;}
+header h1 span { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
+header p { margin: 5px 0 0; font-size: 0.9rem; color: var(--text-muted); }
 
 .avatar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    background: var(--bg-color);
-    border-bottom: 1px solid var(--border-color);
+    padding: 10px 20px 30px;
+    position: relative;
 }
 
-.avatar { width: 100px; height: 100px; }
-#mouth { transition: d 0.1s ease; }
+/* --- GLOBO DE DIÁLOGO --- */
+.speech-bubble {
+    background: #3A2A22; /* Fondo oscuro cálido */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    position: relative;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+/* El piquito del globo */
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 20px; /* Ajustado a la izquierda como en la referencia */
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: #3A2A22 transparent transparent transparent;
+}
+.dots { display: flex; gap: 4px; }
+.dots span { width: 6px; height: 6px; background: var(--accent-color); border-radius: 50%; animation: blink 1.4s infinite both; }
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* --- AVATAR 3D --- */
+.avatar-img {
+    width: 140px; 
+    height: 140px;
+    border-radius: 50%; 
+    object-fit: cover;
+    object-position: center 25%;
+    border: 4px solid var(--accent-color);
+    /* Efecto 3D: Sombras múltiples para dar profundidad */
+    box-shadow: 
+        0 0 20px var(--accent-glow),
+        inset 0 -10px 20px rgba(0,0,0,0.5),
+        0 15px 25px rgba(0,0,0,0.6);
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.avatar-img.speaking {
+    animation: speakBounce 0.15s infinite alternate;
+}
+@keyframes speakBounce {
+    from { transform: scale(1.02) translateY(-5px); box-shadow: 0 0 30px var(--accent-glow); }
+    to { transform: scale(1.05) translateY(-8px); box-shadow: 0 0 50px var(--accent-glow); }
+}
 
 .status {
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 0.85rem;
-    color: var(--teal-color); /* Teal Secundario */
+    color: var(--accent-color);
     font-weight: bold;
+    text-shadow: 0 0 5px var(--accent-glow);
 }
 
+/* --- ÁREA DE MENSAJES --- */
 .chat-box {
     flex: 1;
     padding: 20px;
@@ -71,264 +124,117 @@ header p { margin: 5px 0 0; font-size: 0.9rem; color: #B0B0B0; }
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: var(--bg-color);
 }
 
 .message {
-    padding: 12px 16px;
-    border-radius: 12px;
-    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: 20px;
+    max-width: 85%;
     line-height: 1.4;
     font-size: 0.95rem;
 }
 
 .bot-message {
     background-color: var(--bot-msg);
-    color: var(--text-color);
+    color: var(--text-light);
     align-self: flex-start;
-    border-bottom-left-radius: 0;
+    border-bottom-left-radius: 4px;
 }
 
 .user-message {
     background-color: var(--user-msg);
-    color: #FFFFFF; /* Texto blanco para contrastar con el naranja */
+    color: #FFFFFF;
     align-self: flex-end;
-    border-bottom-right-radius: 0;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 10px rgba(236, 94, 23, 0.3);
+}
+
+/* --- INPUT ESTILO PÍLDORA (Como la referencia) --- */
+.input-wrapper {
+    padding: 15px;
+    background: transparent;
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
 }
 
 .input-area {
     display: flex;
-    padding: 15px;
-    background-color: var(--bg-color);
-    gap: 10px;
     align-items: center;
-    border-top: 1px solid var(--border-color);
+    background-color: var(--bot-msg);
+    border-radius: 30px; /* Forma de píldora */
+    padding: 8px 10px 8px 20px;
+    border: 1px solid #3A3A3A;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.hidden { display: none !important; }
-
-/* Modo Texto */
 #text-input {
     flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background-color: #FAFAFA;
-    color: var(--text-color);
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
     outline: none;
 }
-#text-input:focus { 
-    border-color: var(--accent-color); 
-    background-color: #FFFFFF;
-}
+#text-input::placeholder { color: var(--text-muted); }
 
-button {
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-send { 
-    padding: 12px;
-    border-radius: 8px;
-    background-color: var(--accent-color); 
-    color: white; 
-    font-weight: bold;
-}
-.btn-send:hover { background-color: #D45112; }
-
-.btn-mic {
-    padding: 12px;
-    border-radius: 8px;
-    background-color: var(--bot-msg);
-    color: var(--text-color);
+.btn-send, .btn-mic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 8px;
 }
-.btn-mic:hover { background-color: #E2E4E8; }
 
-/* --- DISEÑO DE GRABACIÓN --- */
+.btn-send {
+    background-color: var(--accent-color);
+    color: white;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+.btn-send:hover { transform: scale(1.05); background-color: #D45112; }
+
+.btn-mic {
+    background-color: transparent;
+    color: var(--text-muted);
+}
+.btn-mic:hover { color: white; }
+
+.hidden { display: none !important; }
+
+/* --- BARRA DE GRABACIÓN --- */
 .recording-bar {
-    background-color: var(--bot-msg); /* Gris claro */
+    background-color: var(--bot-msg);
     border-radius: 30px;
     padding: 8px 15px;
     display: flex;
     align-items: center;
     gap: 15px;
-    margin: 10px 15px;
-    border: 1px solid var(--border-color);
+    border: 1px solid #3A3A3A;
 }
-
-.plus-btn {
-    background: transparent;
-    color: var(--text-color);
-    font-size: 24px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#waveform {
-    flex: 1;
-    width: 100%;
-    height: 30px;
-    background: transparent;
-}
+.plus-btn { background: transparent; color: var(--text-muted); font-size: 24px; border: none; cursor:pointer;}
+#waveform { flex: 1; height: 30px; background: transparent; }
 
 .stop-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #FFFFFF;
-    border: 2px solid var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    background-color: #FFFFFF; display: flex; align-items: center; justify-content: center;
+    border: none; cursor: pointer;
 }
-
-.stop-square {
-    width: 12px;
-    height: 12px;
-    background-color: var(--text-color);
-    border-radius: 2px;
-}
+.stop-square { width: 12px; height: 12px; background-color: #000000; border-radius: 2px; }
 
 .send-voice-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: var(--accent-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-}
-.send-voice-btn:hover { background-color: #D45112; }
-
-/* --- NUEVAS ANIMACIONES DEL AVATAR --- */
-.avatar-img {
-    width: 120px; /* Ajusta el tamaño según tu imagen */
-    height: 120px;
-    border-radius: 50%; /* Hace que la imagen sea circular */
-    object-fit: cover;
-    object-position: center 25%; /* Enfoca la cara (parte superior) */
-    box-shadow: 0 8px 16px rgba(236, 94, 23, 0.2); /* Sombra naranja suave */
-    background-color: var(--bot-msg);
-    border: 3px solid var(--accent-color);
-    
-    /* Animación de respiración constante */
-    animation: breathe 3s infinite ease-in-out;
-    transition: transform 0.1s;
+    width: 36px; height: 36px; border-radius: 50%;
+    background-color: var(--accent-color); color: white;
+    display: flex; align-items: center; justify-content: center;
+    border: none; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);
 }
 
-/* Efecto de respiración */
-@keyframes breathe {
-    0%, 100% { transform: scale(1) translateY(0); }
-    50% { transform: scale(1.03) translateY(-5px); }
-}
-
-/* Efecto cuando el bot habla (se activa con JS) */
-.avatar-img.speaking {
-    animation: speakBounce 0.15s infinite alternate;
-}
-
-@keyframes speakBounce {
-    from { transform: scale(1.03) translateY(-5px); }
-    to { transform: scale(1.05) translateY(-8px); }
-}
-
-/* --- NUEVAS ANIMACIONES DEL AVATAR --- */
-.avatar-img {
-    width: 120px; 
-    height: 120px;
-    border-radius: 50%; 
-    object-fit: cover;
-    object-position: center 25%; /* Enfoca la cara (parte superior) */
-    box-shadow: 0 8px 16px rgba(236, 94, 23, 0.2); /* Sombra naranja suave */
-    background-color: var(--bot-msg);
-    border: 3px solid var(--accent-color);
-    
-    /* Animación de respiración constante */
-    animation: breathe 3s infinite ease-in-out;
-    transition: transform 0.1s;
-}
-
-/* Efecto de respiración */
-@keyframes breathe {
-    0%, 100% { transform: scale(1) translateY(0); }
-    50% { transform: scale(1.03) translateY(-5px); }
-}
-
-/* Efecto cuando el bot habla (se activa con JS) */
-.avatar-img.speaking {
-    animation: speakBounce 0.15s infinite alternate;
-}
-
-@keyframes speakBounce {
-    from { transform: scale(1.03) translateY(-5px); }
-    to { transform: scale(1.05) translateY(-8px); }
-}
-
-/* --- DISEÑO RESPONSIVO (MOBILE-FIRST) --- */
+/* --- MODO RESPONSIVO MÓVIL --- */
 @media (max-width: 600px) {
-    body {
-        align-items: flex-start; /* Evita que el chat flote en el centro en el celular */
-    }
-
-    .chat-container {
-        max-width: 100%;
-        height: 100vh; /* Ocupa todo el alto de la pantalla del celular */
-        border-radius: 0; /* Quita los bordes redondeados en móvil */
-        box-shadow: none;
-    }
-
-    .avatar-img {
-        width: 90px; /* Un poco más pequeño en móvil para ahorrar espacio */
-        height: 90px;
-    }
-
-    .avatar-container {
-        padding: 10px; /* Menos espacio arriba */
-    }
-
-    .input-area {
-        padding: 10px;
-    }
-
-    #text-input {
-        padding: 10px;
-        font-size: 16px; /* Evita que iOS haga zoom automático al escribir */
-    }
-
-    .btn-send, .btn-mic {
-        padding: 10px;
-    }
-}
-
-/* --- FIX PARA TECLADO Y SCROLL EN MÓVILES --- */
-@media (max-width: 600px) {
-    body {
-        height: 100dvh; /* Dynamic Viewport Height: se adapta al teclado */
-        overflow: hidden; /* Evita que toda la página haga scroll */
-    }
-
-    .chat-container {
-        height: 100dvh; /* Ocupa exactamente el espacio visible */
-        max-height: 100dvh;
-    }
-
-    /* TRUCO DE FLEXBOX: Permite que el chat interno haga scroll sin empujar la caja de texto */
-    .chat-box {
-        min-height: 0; 
-        overflow-y: auto;
-    }
-
-    /* Ajuste para el notch de los iPhone o bordes inferiores */
-    .input-area {
-        padding-bottom: max(10px, env(safe-area-inset-bottom));
-    }
+    body { height: 100dvh; overflow: hidden; }
+    .chat-container { height: 100dvh; max-width: 100%; }
+    .chat-box { min-height: 0; }
+    .avatar-img { width: 110px; height: 110px; }
 }
