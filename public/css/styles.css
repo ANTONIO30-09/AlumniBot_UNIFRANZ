@@ -238,3 +238,60 @@ header p { margin: 5px 0 0; font-size: 0.9rem; color: var(--text-muted); }
     .chat-box { min-height: 0; }
     .avatar-img { width: 110px; height: 110px; }
 }
+
+/* --- FIX DE SCROLL MÓVIL Y AVATAR 3D --- */
+
+/* Forzamos al body a no hacer scroll, solo el chat interno */
+body {
+    height: 100dvh;
+    overflow: hidden; 
+}
+
+.chat-container {
+    height: 100dvh;
+    max-height: 100dvh;
+}
+
+/* ESTA ES LA CLAVE PARA EL SCROLL EN FLEXBOX */
+.chat-box {
+    flex: 1;
+    min-height: 0; /* Permite que el contenedor se encoja y active el scroll */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+}
+
+/* --- NUEVO AVATAR ESTILO 3D (SIN CÍRCULO) --- */
+.avatar-img {
+    width: 180px; /* Más grande para que luzca como un personaje */
+    height: 180px;
+    border-radius: 0; /* Quitamos el círculo */
+    border: none; /* Quitamos el borde */
+    background-color: transparent;
+    object-fit: contain; /* Muestra la imagen completa sin recortar */
+    
+    /* Efecto de resplandor 3D (sigue la silueta del PNG) */
+    filter: drop-shadow(0 10px 20px rgba(236, 94, 23, 0.6)) 
+            drop-shadow(0 0 5px rgba(236, 94, 23, 0.3));
+            
+    animation: float3D 4s ease-in-out infinite;
+}
+
+@keyframes float3D {
+    0%, 100% { 
+        transform: translateY(0) scale(1); 
+        filter: drop-shadow(0 10px 20px rgba(236, 94, 23, 0.5));
+    }
+    50% { 
+        transform: translateY(-15px) scale(1.02); 
+        filter: drop-shadow(0 20px 30px rgba(236, 94, 23, 0.8));
+    }
+}
+
+.avatar-img.speaking {
+    animation: speakBounce3D 0.2s infinite alternate;
+}
+
+@keyframes speakBounce3D {
+    from { transform: translateY(-10px) scale(1); filter: drop-shadow(0 15px 25px rgba(236, 94, 23, 0.7)); }
+    to { transform: translateY(-15px) scale(1.05); filter: drop-shadow(0 25px 35px rgba(236, 94, 23, 1)); }
+}
