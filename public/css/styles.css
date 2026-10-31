@@ -238,3 +238,33 @@ button {
     from { transform: scale(1.03) translateY(-5px); }
     to { transform: scale(1.05) translateY(-8px); }
 }
+
+/* --- NUEVAS ANIMACIONES DEL AVATAR --- */
+.avatar-img {
+    width: 130px; 
+    height: auto;
+    border-radius: 50%; 
+    object-fit: cover;
+    background-color: var(--bot-msg);
+    border: 3px solid var(--accent-color);
+    
+    /* Animación de respiración constante */
+    animation: breathe 3s infinite ease-in-out;
+    transition: transform 0.1s;
+}
+
+/* Efecto de respiración */
+@keyframes breathe {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.03) translateY(-5px); }
+}
+
+/* Efecto cuando el bot habla (se activa con JS) */
+.avatar-img.speaking {
+    animation: speakBounce 0.15s infinite alternate;
+}
+
+@keyframes speakBounce {
+    from { transform: scale(1.03) translateY(-5px); }
+    to { transform: scale(1.05) translateY(-8px); }
+}
