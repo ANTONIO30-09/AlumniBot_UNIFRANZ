@@ -44,8 +44,9 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end; /* Pegado al fondo (input) */
-    padding-bottom: 10px;
+    justify-content: flex-end; /* Pegado al fondo */
+    padding: 0;
+    margin: 0;
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     min-height: 0;
     position: relative;
@@ -70,26 +71,28 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     opacity: 0.3;
     z-index: 0;
     border-radius: 50%;
-    bottom: 20%;
+    bottom: 10%;
 }
 
 .avatar-img {
     width: 100%;
-    max-width: 400px; 
+    max-width: 450px; 
     height: 100%;
-    max-height: 95%; 
+    max-height: 100%; /* Ocupa todo el alto disponible */
     object-fit: contain;
+    object-position: bottom; /* Lo pega al fondo */
     background: transparent !important;
     border: none !important;
-    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
     z-index: 1;
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    margin-bottom: -10px; /* Truco para que se pegue al input */
 }
 
-/* Globo de texto clásico */
+/* Globo de texto subido al tope */
 .modern-bubble {
     position: absolute;
-    top: 20%;
+    top: 2%; /* Arriba, sin tapar la cara */
     left: 50%;
     transform: translateX(-50%);
     background: var(--text-light);
@@ -100,11 +103,10 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     font-size: 0.95rem;
     line-height: 1.4;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    z-index: 2;
+    z-index: 5;
     transition: all 0.4s ease;
     white-space: nowrap;
 }
-/* Pico del globo apuntando hacia abajo */
 .modern-bubble::after {
     content: '';
     position: absolute;
@@ -139,7 +141,6 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 }
 .chat-box::-webkit-scrollbar { display: none; }
 
-/* --- NUEVA ESTRUCTURA DE MENSAJES --- */
 .message-row {
     display: flex;
     align-items: flex-end;
@@ -148,20 +149,16 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     animation: fadeIn 0.4s ease;
 }
 
-.message-row.user-row {
-    justify-content: flex-end;
-}
+.message-row.user-row { justify-content: flex-end; }
+.message-row.bot-row { justify-content: flex-start; }
 
-.message-row.bot-row {
-    justify-content: flex-start;
-}
-
-/* Avatar pequeño en el chat */
+/* --- ICONO DEL CHAT (ZOOM A LA CARA) --- */
 .chat-avatar {
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     object-fit: cover;
+    object-position: center 15%; /* Hace zoom a la cara para que no se vea pixeleado */
     border: 2px solid var(--accent-color);
     background-color: var(--bg-black);
     flex-shrink: 0;
@@ -175,16 +172,8 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     font-size: 0.95rem; 
 }
 
-.bot-message { 
-    background-color: var(--bot-msg); 
-    color: var(--text-light); 
-    border-bottom-left-radius: 4px; 
-}
-.user-message { 
-    background-color: var(--user-msg); 
-    color: #FFFFFF; 
-    border-bottom-right-radius: 4px; 
-}
+.bot-message { background-color: var(--bot-msg); color: var(--text-light); border-bottom-left-radius: 4px; }
+.user-message { background-color: var(--user-msg); color: #FFFFFF; border-bottom-right-radius: 4px; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
