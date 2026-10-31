@@ -14,19 +14,8 @@
         </header>
 
         <div class="avatar-container">
-            <svg viewBox="0 0 200 200" class="avatar" xmlns="http://www.w3.org/2000/svg">
-                <!-- Fondo gris claro de soporte, borde naranja -->
-                <circle cx="100" cy="100" r="90" fill="#F4F5F7" stroke="#EC5E17" stroke-width="4"/>
-                <!-- Pelo Naranja Unifranz -->
-                <path d="M 40 80 Q 40 20 100 20 Q 160 20 160 80 Q 150 50 100 50 Q 50 50 40 80 Z" fill="#EC5E17"/>
-                <!-- Ojos -->
-                <circle cx="70" cy="90" r="10" fill="#FFFFFF"/>
-                <circle cx="130" cy="90" r="10" fill="#FFFFFF"/>
-                <circle cx="70" cy="90" r="4" fill="#1C1C1C"/>
-                <circle cx="130" cy="90" r="4" fill="#1C1C1C"/>
-                <!-- Boca Gris Oscuro -->
-                <path id="mouth" d="M 70 130 Q 100 130 130 130" stroke="#1C1C1C" stroke-width="6" stroke-linecap="round" fill="transparent"/>
-            </svg>
+            <!-- Nueva imagen del avatar -->
+            <img src="/assets/avatar.png" alt="AlumniBot" class="avatar-img" id="bot-avatar">
             <div id="status" class="status">Presiona el micrófono para hablar</div>
         </div>
 
@@ -36,7 +25,6 @@
             </div>
         </div>
 
-        <!-- Barra de Entrada Normal -->
         <div class="input-area" id="normal-input-area">
             <input type="text" id="text-input" placeholder="Escribe o dicta tu mensaje aquí..." autocomplete="off">
             <button id="send-btn" class="btn-send">Enviar</button>
@@ -45,15 +33,12 @@
             </button>
         </div>
 
-        <!-- Barra de Grabación -->
         <div class="input-area recording-bar hidden" id="recording-bar">
             <button class="icon-btn plus-btn" title="Adjuntar">+</button>
             <canvas id="waveform" width="300" height="40"></canvas>
-            
             <button id="stop-rec-btn" class="icon-btn stop-btn" title="Detener grabación">
                 <div class="stop-square"></div>
             </button>
-            
             <button id="send-rec-btn" class="icon-btn send-voice-btn" title="Enviar audio">
                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
             </button>
