@@ -7,18 +7,25 @@ const normalInputArea = document.getElementById('normal-input-area');
 const recordingBar = document.getElementById('recording-bar');
 const stopRecBtn = document.getElementById('stop-rec-btn');
 const sendRecBtn = document.getElementById('send-rec-btn');
+const avatarWrapper = document.querySelector('.avatar-wrapper');
 
 let chatStarted = false;
 let isRecording = false;
 
 function startChatExperience() {
     if (!chatStarted) {
+        // 1. Inicia la animación de vuelo
         appContainer.classList.add('chat-mode');
         chatStarted = true;
+        
+        // 2. Esperamos que termine el vuelo (600ms) para mostrar el mensaje
         setTimeout(() => {
+            // Ocultamos el avatar volador instantáneamente
+            avatarWrapper.classList.add('hide-avatar');
+            // Mostramos el mensaje del bot (el cual ya trae su propio icono)
             addMessage("¡Hola! Soy AlumniBot. Puedes preguntarme sobre <b>vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni</b>. ¿En qué te ayudo?", 'bot');
             window.speechAPI.speak("¡Hola! Soy AlumniBot. Puedes preguntarme sobre vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni. ¿En qué te ayudo?");
-        }, 400); 
+        }, 600); 
     }
 }
 
@@ -73,9 +80,8 @@ textInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage(textInput.value);
 });
 
-// --- LÓGICA DE GRABACIÓN ---
 async function startRecordingUI() {
-    startChatExperience(); 
+    startChatExperience();
     const success = await window.speechAPI.startRecording();
     if (success) {
         isRecording = true;
