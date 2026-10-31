@@ -1,0 +1,19 @@
+{
+  "name": "alumnibot_unifranz",
+  "version": "1.0.0",
+  "description": "Asistente virtual interactivo con avatar y audio para la Red Alumni y la Feria de Empleabilidad de UNIFRANZ.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.2",
+    "groq-sdk": "^1.6.0",
+    "minisearch": "^7.2.0"
+  }
+}
