@@ -1,7 +1,6 @@
 const Groq = require('groq-sdk');
 const { getContext } = require('./retriever');
 
-// Inicializar el cliente de Groq
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const SYSTEM_PROMPT = `
@@ -18,10 +17,8 @@ REGLAS ESTRICTAS:
 
 async function generateResponse(userMessage) {
   try {
-    // 1. Buscar contexto en la base de conocimiento
     const context = getContext(userMessage);
 
-    // 2. Llamar a Groq
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
@@ -35,7 +32,15 @@ async function generateResponse(userMessage) {
 
     return chatCompletion.choices[0].message.content;
   } catch (error) {
-    console.error('Error en Groq:', error);
+    console.error('❌ Error detallado en Groq:', error.message);
+    
+    // Manejo específico de errores comunes
+    if (error.status === 429) {
+      return 'El asistente está recibiendo muchas preguntas en este momento. Por favor, intenta de nuevo en unos segundos.';
+    }
+    if (error.status === 401) {
+      return 'Error de configuración: La clave de API no es válida. Contacta al administrador.';
+    }
     return 'Lo siento, estoy teniendo problemas técnicos. Por favor, intenta de nuevo en un momento.';
   }
 }

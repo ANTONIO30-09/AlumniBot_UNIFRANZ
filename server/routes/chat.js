@@ -10,6 +10,10 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'El mensaje es obligatorio.' });
   }
 
+  if (message.length > 500) {
+    return res.status(400).json({ error: 'El mensaje es demasiado largo. Por favor, sé más breve.' });
+  }
+
   try {
     const botResponse = await generateResponse(message);
     res.json({ response: botResponse });
