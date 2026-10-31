@@ -1,353 +1,170 @@
 :root {
-    --bg-dark: #1C1C1C;          /* Gris Oscuro Institucional */
-    --bg-black: #0a0a0a;         /* Negro profundo para el gradiente */
-    --accent-color: #EC5E17;     /* Naranja Unifranz */
-    --accent-glow: rgba(236, 94, 23, 0.5); /* Resplandor naranja */
+    --bg-dark: #1C1C1C;
+    --bg-black: #0a0a0a;
+    --accent-color: #EC5E17;
+    --accent-glow: rgba(236, 94, 23, 0.5);
     --text-light: #FFFFFF;
     --text-muted: #A0A0A0;
-    --bot-msg: #2A2A2A;          /* Gris oscuro para burbuja del bot */
+    --bot-msg: #2A2A2A;
     --user-msg: #EC5E17;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* Fondo radial oscuro con destello naranja */
     background: radial-gradient(circle at top center, var(--bg-dark) 0%, var(--bg-black) 100%);
     color: var(--text-light);
     margin: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    height: 100dvh;
+    overflow: hidden; /* Bloquea el scroll de toda la página */
 }
 
+/* Estructura principal estricta */
 .chat-container {
     width: 100%;
     max-width: 500px;
-    background: transparent; /* Ya no es una caja blanca, es la pantalla completa */
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    position: relative;
+    height: 100dvh;
+    overflow: hidden;
 }
 
-header {
-    text-align: center;
-    padding: 20px;
-    background: transparent;
+/* Header fijo */
+header { 
+    flex-shrink: 0; 
+    text-align: center; 
+    padding: 15px; 
 }
-
-header h1 { margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: 1px;}
+header h1 { margin: 0; font-size: 1.6rem; font-weight: 800; }
 header h1 span { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
-header p { margin: 5px 0 0; font-size: 0.9rem; color: var(--text-muted); }
+header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 
+/* Avatar fijo */
 .avatar-container {
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px 20px 30px;
+    padding: 10px 20px;
     position: relative;
 }
 
-/* --- GLOBO DE DIÁLOGO --- */
-.speech-bubble {
-    background: #3A2A22; /* Fondo oscuro cálido */
-    color: white;
-    padding: 15px 20px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    position: relative;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
-/* El piquito del globo */
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 20px; /* Ajustado a la izquierda como en la referencia */
-    border-width: 10px 10px 0;
-    border-style: solid;
-    border-color: #3A2A22 transparent transparent transparent;
-}
-.dots { display: flex; gap: 4px; }
-.dots span { width: 6px; height: 6px; background: var(--accent-color); border-radius: 50%; animation: blink 1.4s infinite both; }
-.dots span:nth-child(2) { animation-delay: 0.2s; }
-.dots span:nth-child(3) { animation-delay: 0.4s; }
-
-/* --- AVATAR 3D --- */
-.avatar-img {
-    width: 140px; 
-    height: 140px;
-    border-radius: 50%; 
-    object-fit: cover;
-    object-position: center 25%;
-    border: 4px solid var(--accent-color);
-    /* Efecto 3D: Sombras múltiples para dar profundidad */
-    box-shadow: 
-        0 0 20px var(--accent-glow),
-        inset 0 -10px 20px rgba(0,0,0,0.5),
-        0 15px 25px rgba(0,0,0,0.6);
-    animation: float 4s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-.avatar-img.speaking {
-    animation: speakBounce 0.15s infinite alternate;
-}
-@keyframes speakBounce {
-    from { transform: scale(1.02) translateY(-5px); box-shadow: 0 0 30px var(--accent-glow); }
-    to { transform: scale(1.05) translateY(-8px); box-shadow: 0 0 50px var(--accent-glow); }
-}
-
-.status {
-    margin-top: 15px;
-    font-size: 0.85rem;
-    color: var(--accent-color);
-    font-weight: bold;
-    text-shadow: 0 0 5px var(--accent-glow);
-}
-
-/* --- ÁREA DE MENSAJES --- */
-.chat-box {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.message {
-    padding: 12px 18px;
-    border-radius: 20px;
-    max-width: 85%;
-    line-height: 1.4;
-    font-size: 0.95rem;
-}
-
-.bot-message {
-    background-color: var(--bot-msg);
-    color: var(--text-light);
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-}
-
-.user-message {
-    background-color: var(--user-msg);
-    color: #FFFFFF;
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 10px rgba(236, 94, 23, 0.3);
-}
-
-/* --- INPUT ESTILO PÍLDORA (Como la referencia) --- */
-.input-wrapper {
-    padding: 15px;
-    background: transparent;
-    padding-bottom: max(15px, env(safe-area-inset-bottom));
-}
-
-.input-area {
-    display: flex;
-    align-items: center;
-    background-color: var(--bot-msg);
-    border-radius: 30px; /* Forma de píldora */
-    padding: 8px 10px 8px 20px;
-    border: 1px solid #3A3A3A;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-#text-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 1rem;
-    outline: none;
-}
-#text-input::placeholder { color: var(--text-muted); }
-
-.btn-send, .btn-mic {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-    margin-left: 8px;
-}
-
-.btn-send {
-    background-color: var(--accent-color);
-    color: white;
-    box-shadow: 0 0 10px var(--accent-glow);
-}
-.btn-send:hover { transform: scale(1.05); background-color: #D45112; }
-
-.btn-mic {
-    background-color: transparent;
-    color: var(--text-muted);
-}
-.btn-mic:hover { color: white; }
-
-.hidden { display: none !important; }
-
-/* --- BARRA DE GRABACIÓN --- */
-.recording-bar {
-    background-color: var(--bot-msg);
-    border-radius: 30px;
-    padding: 8px 15px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    border: 1px solid #3A3A3A;
-}
-.plus-btn { background: transparent; color: var(--text-muted); font-size: 24px; border: none; cursor:pointer;}
-#waveform { flex: 1; height: 30px; background: transparent; }
-
-.stop-btn {
-    width: 36px; height: 36px; border-radius: 50%;
-    background-color: #FFFFFF; display: flex; align-items: center; justify-content: center;
-    border: none; cursor: pointer;
-}
-.stop-square { width: 12px; height: 12px; background-color: #000000; border-radius: 2px; }
-
-.send-voice-btn {
-    width: 36px; height: 36px; border-radius: 50%;
-    background-color: var(--accent-color); color: white;
-    display: flex; align-items: center; justify-content: center;
-    border: none; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);
-}
-
-/* --- MODO RESPONSIVO MÓVIL --- */
-@media (max-width: 600px) {
-    body { height: 100dvh; overflow: hidden; }
-    .chat-container { height: 100dvh; max-width: 100%; }
-    .chat-box { min-height: 0; }
-    .avatar-img { width: 110px; height: 110px; }
-}
-
-/* --- FIX DE SCROLL MÓVIL Y AVATAR 3D --- */
-
-/* Forzamos al body a no hacer scroll, solo el chat interno */
-body {
-    height: 100dvh;
-    overflow: hidden; 
-}
-
-.chat-container {
-    height: 100dvh;
-    max-height: 100dvh;
-}
-
-/* ESTA ES LA CLAVE PARA EL SCROLL EN FLEXBOX */
-.chat-box {
-    flex: 1;
-    min-height: 0; /* Permite que el contenedor se encoja y active el scroll */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-}
-
-/* --- NUEVO AVATAR ESTILO 3D (SIN CÍRCULO) --- */
-.avatar-img {
-    width: 180px; /* Más grande para que luzca como un personaje */
-    height: 180px;
-    border-radius: 0; /* Quitamos el círculo */
-    border: none; /* Quitamos el borde */
-    background-color: transparent;
-    object-fit: contain; /* Muestra la imagen completa sin recortar */
-    
-    /* Efecto de resplandor 3D (sigue la silueta del PNG) */
-    filter: drop-shadow(0 10px 20px rgba(236, 94, 23, 0.6)) 
-            drop-shadow(0 0 5px rgba(236, 94, 23, 0.3));
-            
-    animation: float3D 4s ease-in-out infinite;
-}
-
-@keyframes float3D {
-    0%, 100% { 
-        transform: translateY(0) scale(1); 
-        filter: drop-shadow(0 10px 20px rgba(236, 94, 23, 0.5));
-    }
-    50% { 
-        transform: translateY(-15px) scale(1.02); 
-        filter: drop-shadow(0 20px 30px rgba(236, 94, 23, 0.8));
-    }
-}
-
-.avatar-img.speaking {
-    animation: speakBounce3D 0.2s infinite alternate;
-}
-
-@keyframes speakBounce3D {
-    from { transform: translateY(-10px) scale(1); filter: drop-shadow(0 15px 25px rgba(236, 94, 23, 0.7)); }
-    to { transform: translateY(-15px) scale(1.05); filter: drop-shadow(0 25px 35px rgba(236, 94, 23, 1)); }
-}
-
-/* --- EFECTO 2.5D PREMIUM --- */
-.avatar-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-}
-
-/* Resplandor de fondo (simula la luz 3D) */
 .avatar-container::before {
     content: '';
     position: absolute;
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     background: var(--accent-color);
-    filter: blur(60px);
-    opacity: 0.4;
+    filter: blur(50px);
+    opacity: 0.3;
     z-index: 0;
     top: 20%;
     border-radius: 50%;
 }
 
+.speech-bubble {
+    background: #3A2A22;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    position: relative;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    z-index: 1;
+}
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 20px;
+    border-width: 8px 8px 0;
+    border-style: solid;
+    border-color: #3A2A22 transparent transparent transparent;
+}
+.dots { display: flex; gap: 4px; }
+.dots span { width: 5px; height: 5px; background: var(--accent-color); border-radius: 50%; animation: blink 1.4s infinite both; }
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Imagen del Avatar (Ajustada y sin flotar) */
 .avatar-img {
-    width: 220px;
-    height: auto;
+    width: 180px;
+    height: 180px;
     object-fit: contain;
     background: transparent !important;
-    border: none !important;
-    box-shadow: none !important; 
-    position: relative;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.8));
     z-index: 1;
-    /* Sombra que sigue la silueta del PNG */
-    filter: drop-shadow(0px 15px 25px rgba(0, 0, 0, 0.8));
-    animation: float 4s ease-in-out infinite;
+    animation: breathe 4s ease-in-out infinite; /* Animación sutil */
 }
 
-/* Ocultar el cuadro negro si la imagen lo tiene incrustado */
-.chat-container {
-    background: transparent;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
 }
 
 .avatar-img.speaking {
-    animation: speakBounce 0.15s infinite alternate;
+    animation: speakPulse 0.3s infinite alternate;
 }
 
-@keyframes speakBounce {
-    from { transform: scale(1.02) translateY(-10px); filter: drop-shadow(0px 20px 30px rgba(236, 94, 23, 0.7)); }
-    to { transform: scale(1.05) translateY(-15px); filter: drop-shadow(0px 30px 40px rgba(236, 94, 23, 1)); }
+@keyframes speakPulse {
+    from { transform: scale(1.03); filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.8)); }
+    to { transform: scale(1.05); filter: drop-shadow(0 15px 25px var(--accent-glow)); }
+}
+
+.status { margin-top: 10px; font-size: 0.85rem; color: var(--accent-color); font-weight: bold; z-index: 1; }
+
+/* --- CAJA DE MENSAJES CON SCROLL --- */
+.chat-box {
+    flex: 1; /* Ocupa todo el espacio restante */
+    min-height: 0; /* CRUCIAL para que el scroll funcione en flexbox */
+    padding: 10px 20px;
+    overflow-y: auto; /* Habilita el scroll interno */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Ocultar la barra de scroll visualmente para que se vea limpio */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+.chat-box::-webkit-scrollbar { 
+    display: none; /* Chrome/Safari */
+}
+
+.message { padding: 12px 18px; border-radius: 20px; max-width: 85%; line-height: 1.4; font-size: 0.95rem; }
+.bot-message { background-color: var(--bot-msg); color: var(--text-light); align-self: flex-start; border-bottom-left-radius: 4px; }
+.user-message { background-color: var(--user-msg); color: #FFFFFF; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+/* --- INPUT FIJO ABAJO --- */
+.input-wrapper { 
+    flex-shrink: 0; 
+    padding: 10px 15px; 
+    padding-bottom: max(15px, env(safe-area-inset-bottom)); 
+    background: var(--bg-black); /* Fondo sólido para tapar el chat detrás */
+}
+.input-area { display: flex; align-items: center; background-color: var(--bot-msg); border-radius: 30px; padding: 8px 10px 8px 20px; border: 1px solid #3A3A3A; }
+#text-input { flex: 1; background: transparent; border: none; color: white; font-size: 1rem; outline: none; }
+#text-input::placeholder { color: var(--text-muted); }
+
+.btn-send, .btn-mic { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; margin-left: 8px; }
+.btn-send { background-color: var(--accent-color); color: white; box-shadow: 0 0 10px var(--accent-glow); }
+.btn-mic { background-color: transparent; color: var(--text-muted); }
+.hidden { display: none !important; }
+
+/* Grabación */
+.recording-bar { background-color: var(--bot-msg); border-radius: 30px; padding: 8px 15px; display: flex; align-items: center; gap: 15px; }
+.plus-btn { background: transparent; color: var(--text-muted); font-size: 24px; border: none; cursor:pointer;}
+#waveform { flex: 1; height: 30px; background: transparent; }
+.stop-btn { width: 36px; height: 36px; border-radius: 50%; background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+.stop-square { width: 12px; height: 12px; background-color: #000000; border-radius: 2px; }
+.send-voice-btn { width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: white; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); }
+
+@media (max-width: 600px) {
+    .avatar-img { width: 150px; height: 150px; }
+    .speech-bubble { display: none; } /* Ocultamos el globo en móviles para ganar espacio */
 }
