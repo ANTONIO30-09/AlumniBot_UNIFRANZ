@@ -105,7 +105,7 @@ function startVisualizer(stream) {
             const minHeight = 4; // Puntos mínimos cuando hay silencio
             currentHeight = Math.max(currentHeight, minHeight);
 
-            canvasCtx.fillStyle = '#e4e4e7'; // Color gris claro
+            canvasCtx.fillStyle = '#1C1C1C'; // Color gris claro
             
             // Dibujar línea tipo píldora
             canvasCtx.beginPath();
