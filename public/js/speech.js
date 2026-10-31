@@ -4,7 +4,7 @@ let recognition;
 
 if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.lang = 'es-BO'; // Español Bolivia
+    recognition.lang = 'es-ES'; // Español Bolivia
     recognition.continuous = false;
     recognition.interimResults = false;
 }
@@ -12,7 +12,7 @@ if (SpeechRecognition) {
 function speak(text) {
     if (synth.speaking) synth.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-BO';
+    utterance.lang = 'es-ES';
     utterance.rate = 1.0;
     
     // Iniciar animación de boca al hablar y detenerla al terminar
