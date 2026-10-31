@@ -255,3 +255,64 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .message-row {
     will-change: transform, opacity;
 }
+
+/* --- EFECTO DE ENCAPSULAMIENTO PERFECTO --- */
+
+.avatar-wrapper {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.avatar-img {
+    will-change: width, height, border-radius, border;
+}
+
+.app-container.chat-mode .avatar-wrapper {
+    /* Mueve el avatar a la esquina superior izquierda (posición del icono) */
+    transform: translate(-38vw, -36vh);
+    z-index: 999;
+}
+
+.app-container.chat-mode .avatar-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    object-position: center 15%;
+    background-color: var(--bg-black);
+    
+    /* El truco: la posición y tamaño tardan 0.6s, pero el circulo y borde cierran rápido al final (delay) */
+    transition: width 0.6s ease-in, height 0.6s ease-in, 
+                border-radius 0.2s ease-in 0.4s, 
+                border 0.1s ease-in 0.5s;
+                
+    border-radius: 50%;
+    border: 2px solid var(--accent-color);
+    filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+/* Oculta el globo inmediatamente */
+.app-container.chat-mode .modern-bubble {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+/* Colapsa la sección para dar paso al chat */
+.app-container.chat-mode .avatar-section {
+    flex: 0 0 0px;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.app-container.chat-mode .chat-section {
+    flex: 1;
+    opacity: 1;
+}
+
+/* Clase que se activa por JS justo al aterrizar para ocultar el avatar volador */
+.avatar-wrapper.hide-avatar {
+    opacity: 0;
+    transition: opacity 0.1s;
+}
