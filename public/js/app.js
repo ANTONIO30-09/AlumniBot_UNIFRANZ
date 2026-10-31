@@ -6,7 +6,6 @@ const statusDiv = document.getElementById('status');
 const recIndicator = document.getElementById('recording-indicator');
 
 let isRecording = false;
-let finalTranscript = '';
 
 function addMessage(text, sender) {
     const msgDiv = document.createElement('div');
@@ -20,7 +19,6 @@ async function sendMessage(message) {
     if (!message.trim()) return;
     addMessage(message, 'user');
     textInput.value = '';
-    finalTranscript = '';
     statusDiv.textContent = "Pensando...";
 
     try {
@@ -44,81 +42,67 @@ async function sendMessage(message) {
     }
 }
 
-// ENVIAR (Si está grabando, detiene y envía)
 sendBtn.addEventListener('click', () => {
-    if (isRecording) {
-        stopRecording();
-    }
+    if (isRecording) stopRecordingAndTranscribe();
     sendMessage(textInput.value);
 });
 
 textInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        if (isRecording) stopRecording();
+        if (isRecording) stopRecordingAndTranscribe();
         sendMessage(textInput.value);
     }
 });
 
-// LÓGICA DEL MICRÓFONO
-function stopRecording() {
-    if (window.speechAPI.recognition) {
-        window.speechAPI.recognition.stop();
-    }
+async function stopRecordingAndTranscribe() {
     isRecording = false;
     micBtn.classList.remove('listening');
     recIndicator.classList.add('hidden');
-    statusDiv.textContent = "Dictado detenido. Puedes editar o enviar.";
+    statusDiv.textContent = "Procesando audio...";
+
+    const audioBlob = await window.speechAPI.stopRecording();
+    if (!audioBlob) {
+        statusDiv.textContent = "No se grabó audio.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'grabacion.webm');
+
+    try {
+        const response = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        
+        if (data.text) {
+            textInput.value = data.text;
+            statusDiv.textContent = "Texto transcrito. Puedes editarlo o enviarlo.";
+        } else {
+            statusDiv.textContent = "Error al transcribir.";
+        }
+    } catch (error) {
+        console.error("Error de transcripción:", error);
+        statusDiv.textContent = "Error de red al transcribir.";
+    }
 }
 
-if (window.speechAPI.recognition) {
-    micBtn.addEventListener('click', () => {
-        if (isRecording) {
-            stopRecording();
+micBtn.addEventListener('click', async () => {
+    if (isRecording) {
+        await stopRecordingAndTranscribe();
+    } else {
+        const success = await window.speechAPI.startRecording();
+        if (success) {
+            isRecording = true;
+            micBtn.classList.add('listening');
+            recIndicator.classList.remove('hidden');
+            statusDiv.textContent = "Grabando... Habla ahora.";
         } else {
-            try {
-                finalTranscript = textInput.value; // Mantiene lo que ya estaba escrito
-                window.speechAPI.recognition.start();
-                isRecording = true;
-                micBtn.classList.add('listening');
-                recIndicator.classList.remove('hidden');
-                statusDiv.textContent = "Escuchando...";
-            } catch (e) {
-                console.error(e);
-            }
+            statusDiv.textContent = "No se pudo acceder al micrófono.";
         }
-    });
+    }
+});
 
-    // Evento que se dispara mientras hablas (tiempo real)
-    window.speechAPI.recognition.onresult = (event) => {
-        let interimTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-                finalTranscript += event.results[i][0].transcript + ' ';
-            } else {
-                interimTranscript += event.results[i][0].transcript;
-            }
-        }
-        // Muestra lo que estás hablando en el input
-        textInput.value = finalTranscript + interimTranscript;
-    };
-
-    window.speechAPI.recognition.onend = () => {
-        if (isRecording) {
-            // Si el navegador lo detiene por inactividad, lo reiniciamos
-            window.speechAPI.recognition.start();
-        }
-    };
-
-    window.speechAPI.recognition.onerror = (event) => {
-        console.error("Error de reconocimiento:", event.error);
-        stopRecording();
-        if (event.error === 'network') {
-            statusDiv.textContent = "Error de red (Chrome en Linux no soporta voz nativa). Usa el teclado.";
-        } else {
-            statusDiv.textContent = `Error: ${event.error}.`;
-        }
-    };
-} else {
-    micBtn.style.display = 'none';
-    statusDiv.textContent = "Tu navegador no soporta reconocimiento de voz. Usa Chrome o Edge.";
-}
+// Inicializar estado
+statusDiv.textContent = "Presiona el micrófono para hablar";

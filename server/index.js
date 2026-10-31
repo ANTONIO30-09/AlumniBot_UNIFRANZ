@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Rutas de la API
 app.use('/api/chat', chatRoute);
+app.use('/api/transcribe', require('./routes/transcribe'));
 
 // Ruta comodín para el frontend
 app.get('/*splat', (req, res) => {
