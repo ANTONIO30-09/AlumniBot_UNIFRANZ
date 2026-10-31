@@ -229,3 +229,29 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     opacity: 1;
     overflow: visible;
 }
+
+/* --- ANIMACIÓN LIMPIA (FADE & SCALE) --- */
+.avatar-wrapper {
+    will-change: transform, opacity; /* Acelera la animación por GPU */
+    backface-visibility: hidden;
+}
+
+.app-container.chat-mode .avatar-wrapper {
+    /* En lugar de volar, se encoge y se desvanece en su lugar */
+    transform: scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-container.chat-mode .avatar-section {
+    flex: 0;
+    height: 0; /* Se colapsa suavemente */
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+/* El mensaje del bot aparece con un fade-in elegante */
+.message-row {
+    will-change: transform, opacity;
+}
