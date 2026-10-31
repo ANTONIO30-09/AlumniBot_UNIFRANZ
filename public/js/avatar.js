@@ -1,21 +1,16 @@
-const mouth = document.getElementById('mouth');
-let animationInterval;
+const avatarImg = document.getElementById('bot-avatar');
 
-// Simula el movimiento de la boca mientras habla
+// Simula el movimiento del avatar mientras habla
 function startMouthAnimation() {
-    const originalD = "M 70 130 Q 100 130 130 130";
-    const openD = "M 70 130 Q 100 160 130 130";
-    let isOpen = false;
-
-    animationInterval = setInterval(() => {
-        isOpen = !isOpen;
-        mouth.setAttribute('d', isOpen ? openD : originalD);
-    }, 150);
+    if (avatarImg) {
+        avatarImg.classList.add('speaking');
+    }
 }
 
 function stopMouthAnimation() {
-    clearInterval(animationInterval);
-    mouth.setAttribute('d', "M 70 130 Q 100 130 130 130");
+    if (avatarImg) {
+        avatarImg.classList.remove('speaking');
+    }
 }
 
 window.avatarAnimation = { startMouthAnimation, stopMouthAnimation };
