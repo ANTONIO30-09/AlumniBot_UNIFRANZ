@@ -142,3 +142,14 @@ async function stopRecordingUI(action) {
 micBtn.addEventListener('click', startRecordingUI);
 stopRecBtn.addEventListener('click', () => stopRecordingUI('stop'));
 sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
+
+// --- LÓGICA DEL MENÚ INICIAL (TÓTEM) ---
+window.startWithOption = function(text) {
+    // Iniciamos la animación del avatar hacia el header
+    startChatExperience();
+    
+    // Esperamos un momento a que la interfaz cambie y enviamos la pregunta
+    setTimeout(() => {
+        sendMessage(text);
+    }, 500); // Medio segundo para que la transición se vea fluida
+};

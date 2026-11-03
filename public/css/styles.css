@@ -321,3 +321,46 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
   .app-container .avatar-img { transition: none; }
 }
 /* FIN AVATAR HEADER v1 */
+
+/* --- MENÚ INICIAL MODO TÓTEM --- */
+.idle-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+    max-width: 400px;
+    margin-top: 15px;
+    z-index: 10;
+}
+
+.idle-menu p {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.idle-btn {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    border: 2px solid var(--accent-color);
+    padding: 15px 20px;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.idle-btn:hover, .idle-btn:active {
+    background-color: var(--accent-color);
+    color: white;
+    transform: scale(0.98);
+}
+
+/* Ocultar el menú cuando entramos al chat */
+.app-container.chat-mode .idle-menu {
+    display: none !important;
+}
