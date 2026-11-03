@@ -621,3 +621,43 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     background-color: var(--accent-color);
     color: white;
 }
+
+/* ==========================================================
+   AJUSTES FINOS PARA CELULARES (Mobile-First)
+   ========================================================== */
+@media (max-width: 600px) {
+    /* 1. Evitar que el avatar se coma el texto de abajo */
+    .app-container:not(.chat-mode) .avatar-img {
+        max-height: 42vh !important; /* Un poco más pequeño en celular */
+    }
+
+    /* 2. Darle margen al texto para que no se superponga */
+    .idle-menu {
+        margin-top: 5px !important;
+    }
+    
+    .idle-menu p {
+        margin-bottom: 8px !important;
+        font-size: 0.8rem !important;
+        display: block !important; /* Forzar que sea visible */
+    }
+
+    /* 3. Hacer los botones un poco más compactos */
+    .idle-btn {
+        padding: 10px 8px !important;
+        font-size: 0.85rem !important;
+    }
+
+    /* 4. Ajustar el globo de texto y bajar el pico para que apunte a la boca */
+    .app-container:not(.chat-mode) .modern-bubble {
+        top: 12% !important; /* Subir el globo un poco */
+    }
+    
+    /* Mover los triángulos del pico un poco hacia abajo */
+    .app-container:not(.chat-mode) .modern-bubble::before {
+        top: 40px !important; 
+    }
+    .app-container:not(.chat-mode) .modern-bubble::after {
+        top: 42px !important; 
+    }
+}
