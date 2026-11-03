@@ -1,6 +1,5 @@
 const appContainer = document.getElementById('app-container');
 const chatBox = document.getElementById('chat-box');
-const quickRepliesContainer = document.getElementById('quick-replies');
 const textInput = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const micBtn = document.getElementById('mic-btn');
@@ -8,10 +7,12 @@ const normalInputArea = document.getElementById('normal-input-area');
 const recordingBar = document.getElementById('recording-bar');
 const stopRecBtn = document.getElementById('stop-rec-btn');
 const sendRecBtn = document.getElementById('send-rec-btn');
+const idleMenu = document.getElementById('idle-menu'); // El menú 2x2 nuevo
 
 let chatStarted = false;
 let isRecording = false;
 
+// Función para limpiar asteriscos
 function cleanText(text) {
     return text.replace(/\*/g, '');
 }
@@ -21,37 +22,26 @@ function startChatExperience() {
         appContainer.classList.add('chat-mode');
         chatStarted = true;
         
+        // Ocultamos el menú 2x2 y mostramos el chat
+        if (idleMenu) idleMenu.style.display = 'none';
+        
         setTimeout(() => {
             addMessage("¡Hola! Soy Catalina. Puedes preguntarme sobre <b>vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni</b>. ¿En qué te ayudo?", 'bot');
             window.speechAPI.speak("¡Hola! Soy Catalina. Puedes preguntarme sobre vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni. ¿En qué te ayudo?");
-            showQuickReplies();
         }, 400); 
     }
 }
 
+// Función global para los botones del menú 2x2
+window.startWithOption = function(text) {
+    startChatExperience();
+    setTimeout(() => {
+        sendMessage(text);
+    }, 500); 
+};
+
 textInput.addEventListener('focus', startChatExperience);
 micBtn.addEventListener('click', startChatExperience);
-
-function showQuickReplies() {
-    quickRepliesContainer.innerHTML = '';
-    const options = [
-        "¿Cómo consigo una pasantía?",
-        "¿Qué es el Career Coaching?",
-        "Ver vacantes disponibles",
-        "¿Qué es la Red Alumni?"
-    ];
-
-    options.forEach(text => {
-        const btn = document.createElement('button');
-        btn.classList.add('quick-reply-btn');
-        btn.textContent = text;
-        btn.onclick = () => {
-            quickRepliesContainer.innerHTML = ''; 
-            sendMessage(text);
-        };
-        quickRepliesContainer.appendChild(btn);
-    });
-}
 
 function addMessage(text, sender) {
     const rowDiv = document.createElement('div');
@@ -77,7 +67,6 @@ async function sendMessage(message) {
     startChatExperience(); 
     addMessage(message, 'user');
     textInput.value = '';
-    quickRepliesContainer.innerHTML = ''; 
 
     try {
         const response = await fetch('/api/chat', {
@@ -93,7 +82,7 @@ async function sendMessage(message) {
             addMessage(data.error || "Error al procesar.", 'bot');
         }
     } catch (error) {
-        addMessage("Error de conexión.", 'bot');
+        addMessage("Error de conexión. Verifica que el servidor esté encendido.", 'bot');
     }
 }
 
@@ -109,7 +98,6 @@ async function startRecordingUI() {
         isRecording = true;
         normalInputArea.classList.add('hidden');
         recordingBar.classList.remove('hidden');
-        quickRepliesContainer.innerHTML = '';
     }
 }
 
@@ -142,14 +130,3 @@ async function stopRecordingUI(action) {
 micBtn.addEventListener('click', startRecordingUI);
 stopRecBtn.addEventListener('click', () => stopRecordingUI('stop'));
 sendRecBtn.addEventListener('click', () => stopRecordingUI('send'));
-
-// --- LÓGICA DEL MENÚ INICIAL (TÓTEM) ---
-window.startWithOption = function(text) {
-    // Iniciamos la animación del avatar hacia el header
-    startChatExperience();
-    
-    // Esperamos un momento a que la interfaz cambie y enviamos la pregunta
-    setTimeout(() => {
-        sendMessage(text);
-    }, 500); // Medio segundo para que la transición se vea fluida
-};
