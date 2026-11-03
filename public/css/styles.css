@@ -595,3 +595,29 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     cursor: pointer; 
     box-shadow: 0 0 10px var(--accent-glow); 
 }
+
+/* Botones de opciones dentro del chat */
+.chat-quick-replies {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 10px 15px;
+    scrollbar-width: none;
+}
+.chat-quick-replies::-webkit-scrollbar { display: none; }
+
+.chat-option-btn {
+    background-color: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.chat-option-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
