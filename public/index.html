@@ -21,12 +21,15 @@
                 <img src="/assets/avatar.png" alt="Catalina" class="avatar-img" id="bot-avatar">
             </div>
             
-            <!-- MENÚ INICIAL PARA EL TÓTEM (Opciones 1, 2, 3) -->
+            <!-- NUEVO MENÚ INICIAL EN CUADRÍCULA (Estilo Referencia) -->
             <div class="idle-menu" id="idle-menu">
                 <p>Presiona una opción para comenzar:</p>
-                <button class="idle-btn" onclick="startWithOption('¿Cómo consigo una pasantía?')">1. ¿Cómo consigo una pasantía?</button>
-                <button class="idle-btn" onclick="startWithOption('¿Qué es el Career Coaching?')">2. ¿Qué es el Career Coaching?</button>
-                <button class="idle-btn" onclick="startWithOption('Ver vacantes disponibles')">3. Ver vacantes disponibles</button>
+                <div class="grid-buttons">
+                    <button class="idle-btn" onclick="startWithOption('Quiero información sobre pasantías')">Quiero una Pasantía</button>
+                    <button class="idle-btn" onclick="startWithOption('Ver vacantes disponibles')">Ver Vacantes</button>
+                    <button class="idle-btn" onclick="startWithOption('¿Qué es el Career Coaching?')">Saber de Coaching</button>
+                    <button class="idle-btn" onclick="startWithOption('¿Cómo agendo una entrevista?')">Agendar Entrevista</button>
+                </div>
             </div>
         </div>
 
