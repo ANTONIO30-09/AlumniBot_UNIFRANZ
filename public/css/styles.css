@@ -364,3 +364,36 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .app-container.chat-mode .idle-menu {
     display: none !important;
 }
+
+/* ==========================================================
+   FIX DE EMERGENCIA: Layout para el menú del tótem
+   ========================================================== */
+
+/* Cuando NO estamos en modo chat (pantalla inicial) */
+.app-container:not(.chat-mode) .avatar-section {
+    justify-content: center !important; /* Centra todo verticalmente */
+    padding: 10px !important;
+    overflow-y: auto !important; /* Permite scroll si la pantalla es pequeña */
+}
+
+.app-container:not(.chat-mode) .avatar-wrapper {
+    height: auto !important; /* Evita que colapse */
+    flex-shrink: 0;
+}
+
+.app-container:not(.chat-mode) .avatar-img {
+    height: auto !important;
+    max-height: 42vh !important; /* Limita la altura del avatar para que quepa el menú */
+    margin-bottom: 0 !important;
+}
+
+/* Ajustar el globo de texto para que no se salga de la pantalla con el nuevo tamaño */
+.app-container:not(.chat-mode) .modern-bubble {
+    top: 10% !important;
+    left: 0% !important;
+}
+
+.idle-menu {
+    margin-top: 10px !important;
+    flex-shrink: 0;
+}
