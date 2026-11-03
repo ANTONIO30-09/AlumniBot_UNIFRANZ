@@ -197,3 +197,53 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
   opacity: 0 !important;
   transition: none !important;
 }
+
+/* --- AVATAR PERSISTENTE EN MODO CHAT --- */
+.app-container.chat-mode .avatar-section {
+    flex: 0 0 auto; 
+    height: auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: all 0.4s ease;
+}
+
+.app-container.chat-mode .avatar-wrapper {
+    transform: scale(1); 
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.app-container.chat-mode .avatar-img {
+    width: 120px; 
+    height: 120px;
+    margin-bottom: 0;
+}
+
+.app-container.chat-mode .modern-bubble {
+    display: none; 
+}
+
+/* --- BOTONES DE SUGERENCIA (QUICK REPLIES) --- */
+.quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 20px;
+    justify-content: center;
+}
+
+.quick-reply-btn {
+    background-color: var(--bg-dark);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quick-reply-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+}

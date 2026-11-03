@@ -13,7 +13,7 @@ const CACHE_MAX      = 500;
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY, timeout: TIMEOUT_MS, maxRetries: 0 });
 
 const SYSTEM_PROMPT = `
-Eres "AlumniBot", el asistente virtual oficial de la Red Alumni de UNIFRANZ Cochabamba.
+Eres "Catalina", el asistente virtual oficial de la Red Alumni de UNIFRANZ Cochabamba.
 Tu objetivo es ayudar a estudiantes, graduados y empresas durante la Feria de Empleabilidad.
 
 REGLAS ESTRICTAS:
