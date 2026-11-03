@@ -247,3 +247,77 @@ header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
     background-color: var(--accent-color);
     color: white;
 }
+
+/* ==========================================================
+   AVATAR HEADER v1: en chat-mode el avatar se encoge a un
+   header persistente (88px) y NUNCA desaparece. El chat ocupa
+   el resto con scroll propio, por debajo del avatar.
+   ========================================================== */
+.app-container .avatar-section {
+  transition: flex-basis 0.4s ease, height 0.4s ease, min-height 0.4s ease,
+              padding 0.4s ease, margin 0.4s ease;
+}
+.app-container .avatar-img {
+  transition: width 0.4s ease, height 0.4s ease, border-radius 0.4s ease,
+              border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Header persistente: vuelve al flujo normal y reserva su altura */
+.app-container.chat-mode .avatar-section {
+  position: relative !important;
+  inset: auto !important;
+  flex: 0 0 88px !important;
+  height: 88px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Avatar en miniatura: recorte circular centrado en la cara */
+.app-container.chat-mode .avatar-img {
+  width: 80px !important;
+  height: 80px !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  object-fit: cover;
+  object-position: 50% 18%;
+  border-radius: 50%;
+  border: 2px solid #EC5E17;
+  box-shadow: 0 0 18px rgba(236, 94, 23, 0.35);
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* El globo de texto no aparece en el header */
+.app-container.chat-mode .modern-bubble {
+  display: none !important;
+}
+
+/* El chat ocupa el resto y es lo único que hace scroll */
+.app-container.chat-mode .chat-section {
+  flex: 1 1 auto !important;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* los mensajes se funden al pasar por debajo del avatar */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 18px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-container .avatar-section,
+  .app-container .avatar-img { transition: none; }
+}
+/* FIN AVATAR HEADER v1 */
