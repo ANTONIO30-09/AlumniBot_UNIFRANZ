@@ -7,32 +7,38 @@ const normalInputArea = document.getElementById('normal-input-area');
 const recordingBar = document.getElementById('recording-bar');
 const stopRecBtn = document.getElementById('stop-rec-btn');
 const sendRecBtn = document.getElementById('send-rec-btn');
-const idleMenu = document.getElementById('idle-menu'); // El menú 2x2 nuevo
+const idleMenu = document.getElementById('idle-menu');
 
 let chatStarted = false;
 let isRecording = false;
 
-// Función para limpiar asteriscos
 function cleanText(text) {
-    return text.replace(/\*/g, '');
+    // Convertir saltos de línea a <br>
+    let formatted = text.replace(/\n/g, '<br>');
+    // Convertir negritas de markdown (**texto**) a <b>texto</b>
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+    // Limpiar asteriscos sueltos (viñetas)
+    formatted = formatted.replace(/\*/g, '');
+    return formatted;
 }
 
+// Función para iniciar el chat (desde los botones del inicio o al tocar la caja de texto)
 function startChatExperience() {
     if (!chatStarted) {
         appContainer.classList.add('chat-mode');
         chatStarted = true;
         
-        // Ocultamos el menú 2x2 y mostramos el chat
         if (idleMenu) idleMenu.style.display = 'none';
         
         setTimeout(() => {
             addMessage("¡Hola! Soy Catalina. Puedes preguntarme sobre <b>vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni</b>. ¿En qué te ayudo?", 'bot');
             window.speechAPI.speak("¡Hola! Soy Catalina. Puedes preguntarme sobre vacantes, prácticas, Career Coaching, ferias de empleabilidad, networking y beneficios Alumni. ¿En qué te ayudo?");
+            showChatQuickReplies(); // Mostrar opciones en el chat
         }, 400); 
     }
 }
 
-// Función global para los botones del menú 2x2
+// Función para los botones de la pantalla de inicio
 window.startWithOption = function(text) {
     startChatExperience();
     setTimeout(() => {
@@ -42,6 +48,39 @@ window.startWithOption = function(text) {
 
 textInput.addEventListener('focus', startChatExperience);
 micBtn.addEventListener('click', startChatExperience);
+
+// Función para mostrar opciones dentro del chat
+function showChatQuickReplies() {
+    // Eliminar si ya existen para no duplicar
+    const existing = document.getElementById('chat-quick-replies');
+    if (existing) existing.remove();
+
+    const container = document.createElement('div');
+    container.id = 'chat-quick-replies';
+    container.className = 'chat-quick-replies';
+
+    const options = [
+        "Quiero una Pasantía", 
+        "Ver Vacantes", 
+        "Saber de Coaching", 
+        "Agendar Entrevista"
+    ];
+
+    options.forEach(op => {
+        const btn = document.createElement('button');
+        btn.className = 'chat-option-btn';
+        btn.textContent = op;
+        btn.onclick = () => {
+            container.remove(); // Se ocultan al hacer clic
+            sendMessage(op);
+        };
+        container.appendChild(btn);
+    });
+
+    // Insertarlo justo arriba de la caja de texto
+    const inputWrapper = document.getElementById('input-wrapper');
+    inputWrapper.parentNode.insertBefore(container, inputWrapper);
+}
 
 function addMessage(text, sender) {
     const rowDiv = document.createElement('div');
@@ -67,6 +106,10 @@ async function sendMessage(message) {
     startChatExperience(); 
     addMessage(message, 'user');
     textInput.value = '';
+
+    // Ocultar botones rápidos al enviar un mensaje
+    const quickReplies = document.getElementById('chat-quick-replies');
+    if (quickReplies) quickReplies.remove();
 
     try {
         const response = await fetch('/api/chat', {
